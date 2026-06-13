@@ -1,8 +1,14 @@
 
+using Glowtics.BLL.Interfaces;
+using Glowtics.BLL.Services;
+using Glowtics.BLL.Settings;
 using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Glowtics.Api
 {
@@ -29,9 +35,34 @@ namespace Glowtics.Api
            .AddRoles<IdentityRole<Guid>>()
            .AddEntityFrameworkStores<GlowticsDbContext>();
 
+            // Register BLL Services
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Glowtics.BLL.Commands.LoginCommand).Assembly));
+            builder.Services.AddScoped<IJwtService, JwtService>();
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
+
             // Register AutoMapper
             builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+            // Configure Authentication
+            var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings?.Issuer,
+                    ValidAudience = jwtSettings?.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key ?? string.Empty))
+                };
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -43,6 +74,7 @@ namespace Glowtics.Api
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
