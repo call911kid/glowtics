@@ -11,6 +11,11 @@
     <ProjectReference Include="..\Glowtics.Shared\Glowtics.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
+  </ItemGroup>
+
 </Project>
