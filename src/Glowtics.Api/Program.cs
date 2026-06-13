@@ -29,6 +29,9 @@ namespace Glowtics.Api
            .AddRoles<IdentityRole<Guid>>()
            .AddEntityFrameworkStores<GlowticsDbContext>();
 
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Glowtics.BLL.Commands.LoginCommand).Assembly));
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -11,4 +11,6 @@
     <ProjectReference Include="..\Glowtics.Shared\Glowtics.Shared.csproj" />
   </ItemGroup>
 
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
 </Project>
