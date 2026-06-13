@@ -36,12 +36,15 @@ namespace Glowtics.Api
            .AddEntityFrameworkStores<GlowticsDbContext>();
 
             // Register BLL Services
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Glowtics.BLL.Commands.LoginCommand).Assembly));
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IBllAssemblyMarker).Assembly));
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 
             // Register AutoMapper
-            builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+            builder.Services.AddAutoMapper(cfg => cfg.AddMaps(
+                typeof(Program).Assembly, 
+                typeof(IBllAssemblyMarker).Assembly
+            ));
             // Configure Authentication
             var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>();
             builder.Services.AddAuthentication(options =>
