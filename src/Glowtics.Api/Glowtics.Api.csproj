@@ -14,4 +14,10 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Glowtics.BLL\Glowtics.BLL.csproj" />
+    <ProjectReference Include="..\Glowtics.DAL\Glowtics.DAL.csproj" />
+    <ProjectReference Include="..\Glowtics.Shared\Glowtics.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
