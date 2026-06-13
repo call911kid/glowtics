@@ -48,14 +48,11 @@ Authorization: Bearer <jwt_token>
 
 | Claim | Description |
 |---|---|
-| `sub` | Retailer GUID |
-| `email` | Retailer email |
-| `domain` | Retailer domain |
+| `sub` | User GUID |
+| `email` | User email |
 | `iat` | Issued-at timestamp |
 | `exp` | Expiration timestamp (24 hours from issue) |
 
-> [!NOTE]
-> Refresh tokens are out of scope for MVP. Retailers re-authenticate via login when the JWT expires.
 
 ### 2. API Key — Catalog Operations
 
@@ -99,9 +96,9 @@ All error responses follow this structure:
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `type` | `string` | ✅ | Machine-readable error code (see [Error Code Reference](#error-code-reference)). |
-| `message` | `string` | ✅ | Human-readable summary. |
-| `errors` | `array` | ❌ | Present only for validation errors. Contains per-field details. |
+| `type` | `string` | yes | Machine-readable error code (see [Error Code Reference](#error-code-reference)). |
+| `message` | `string` | yes | Human-readable summary. |
+| `errors` | `array` | no | Present only for validation errors. Contains per-field details. |
 
 ---
 
@@ -216,7 +213,6 @@ Authenticates a retailer and returns a JWT access token.
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
-  "tokenType": "Bearer",
   "expiresIn": 86400
 }
 ```
@@ -224,7 +220,6 @@ Authenticates a retailer and returns a JWT access token.
 | Field | Type | Description |
 |---|---|---|
 | `accessToken` | `string` | JWT token. |
-| `tokenType` | `string` | Always `"Bearer"`. |
 | `expiresIn` | `integer` | Token lifetime in seconds (24 hours = `86400`). |
 
 #### Errors
