@@ -48,13 +48,13 @@ namespace Glowtics.Api.Middleware
             BadRequestException => HttpStatusCode.BadRequest,
             
             // ValidationException => HttpStatusCode.BadRequest,
-            // NotFoundException => HttpStatusCode.NotFound,
+            NotFoundException => HttpStatusCode.NotFound,
             _ => HttpStatusCode.InternalServerError
         };
 
         private string GetMessage(Exception exception) => exception switch
         {
-            
+            NotFoundException => exception.Message,
             BadRequestException => exception.Message,
             _ => _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request."
         };
