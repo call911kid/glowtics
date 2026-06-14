@@ -8,7 +8,11 @@ namespace Glowtics.Api.Mapping
     {
         public AuthProfile()
         {
-            CreateMap<LoginResponse, LoginResponseDto>();
+            // Login Mapping
+            CreateMap<GenerateTokenResponse, LoginResponseDto>();
+
+            // Register Mapping
+            CreateMap<RegisterRetailerResponse, RegisterRetailerResponseDto>();
         }
     }
 }

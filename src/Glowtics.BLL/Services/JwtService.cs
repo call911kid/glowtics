@@ -23,7 +23,7 @@ namespace Glowtics.BLL.Services
             _jwtSettings = jwtOptions.Value;
         }
 
-        public LoginResponse GenerateToken(GlowticsUser user, IList<string> roles)
+        public GenerateTokenResponse GenerateToken(GlowticsUser user, IList<string> roles)
         {
             var claims = new List<Claim>
             {
@@ -49,10 +49,11 @@ namespace Glowtics.BLL.Services
                 signingCredentials: creds
             );
 
-            return new LoginResponse(
-                new JwtSecurityTokenHandler().WriteToken(token),
-                _jwtSettings.ExpiryMinutes * 60
-            );
+            return new GenerateTokenResponse 
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                ExpiresIn = _jwtSettings.ExpiryMinutes * 60
+            };
         }
     }
 }

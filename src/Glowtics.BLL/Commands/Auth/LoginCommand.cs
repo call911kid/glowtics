@@ -10,11 +10,11 @@ using Glowtics.DAL.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Glowtics.BLL.Commands
+namespace Glowtics.BLL.Commands.Auth
 {
-    public record LoginCommand(string Email, string Password) : IRequest<LoginResponse>;
+    public record LoginCommand(string Email, string Password) : IRequest<GenerateTokenResponse>;
 
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, GenerateTokenResponse>
     {
         private readonly UserManager<GlowticsUser> _userManager;
         private readonly IJwtService _jwtService;
@@ -25,7 +25,7 @@ namespace Glowtics.BLL.Commands
             _jwtService = jwtService;
         }
 
-        public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<GenerateTokenResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)

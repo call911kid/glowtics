@@ -10,6 +10,6 @@ namespace Glowtics.BLL.Interfaces
 {
     public interface IJwtService
     {
-        LoginResponse GenerateToken(GlowticsUser user, IList<string> roles);
+        GenerateTokenResponse GenerateToken(GlowticsUser user, IList<string> roles);
     }
 }

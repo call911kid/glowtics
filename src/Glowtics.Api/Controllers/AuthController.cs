@@ -1,6 +1,8 @@
 using Glowtics.Api.DTOs.Requests;
 using Glowtics.Api.DTOs.Responses;
-using Glowtics.BLL.Commands;
+using Glowtics.Api.Responses;
+using Glowtics.BLL.Commands.Auth;
+using Glowtics.BLL.Orchestrators;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
@@ -23,16 +25,24 @@ namespace Glowtics.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            // 1. Explicitly create the command from the DTO
             var command = new LoginCommand(request.Email, request.Password);
             
-            // 2. Dispatch to MediatR
             var result = await _mediator.Send(command);
 
-            // 3. AutoMap the CQRS Response to the API DTO
             var responseDto = _mapper.Map<LoginResponseDto>(result);
 
-            return Ok(responseDto);
+            return Ok(ApiResponse.Success(responseDto));
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterRetailer([FromBody] RegisterRetailerRequestDto request)
+        {
+            var command = new RegisterRetailerOrchestratorRequest(request.Email, request.Password, request.Domain);
+            var result = await _mediator.Send(command);
+
+            var responseDto = _mapper.Map<RegisterRetailerResponseDto>(result);
+
+            return Ok(ApiResponse.Success(responseDto));
         }
     }
 }

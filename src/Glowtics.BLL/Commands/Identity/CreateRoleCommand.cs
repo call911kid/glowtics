@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using Glowtics.BLL.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Glowtics.BLL.Commands
+namespace Glowtics.BLL.Commands.Identity
 {
     public record CreateRoleCommand(
         string RoleName
