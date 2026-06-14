@@ -2,6 +2,7 @@
 using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Services;
 using Glowtics.BLL.Settings;
+using Glowtics.Api.Middleware;
 using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,6 +68,8 @@ namespace Glowtics.Api
             });
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
