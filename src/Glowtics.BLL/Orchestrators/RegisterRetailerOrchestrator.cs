@@ -1,8 +1,7 @@
-using Glowtics.BLL.Commands;
+using Glowtics.BLL.Commands.Identity;
+using Glowtics.BLL.Commands.Retailers;
 using Glowtics.BLL.Responses;
 using Glowtics.DAL.Context;
-using Glowtics.DAL.Entities;
-using Glowtics.DAL.Enums;
 using MediatR;
 using System;
 using System.Threading;
@@ -29,13 +28,13 @@ namespace Glowtics.BLL.Orchestrators
 
             try
             {
-                var userId = await _mediator.Send(new Commands.Identity.CreateGlowticsUserCommand(request.Email, request.Password, "Retailer"), cancellationToken);
+                var userId = await _mediator.Send(new CreateGlowticsUserCommand(request.Email, request.Password, "Retailer"), cancellationToken);
 
                 
                 // var collectionName = await _mediator.Send(new CreateMongoCollectionCommand(request.Domain), cancellationToken);
                 var collectionName = $"retailer_{userId}";
 
-                var retailerProfile = await _mediator.Send(new Commands.Retailers.CreateRetailerProfileCommand(userId, request.Domain, collectionName), cancellationToken);
+                var retailerProfile = await _mediator.Send(new CreateRetailerProfileCommand(userId, request.Domain, collectionName), cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
 
