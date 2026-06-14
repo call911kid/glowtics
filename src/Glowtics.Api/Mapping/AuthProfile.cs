@@ -13,6 +13,9 @@ namespace Glowtics.Api.Mapping
 
             // Register Mapping
             CreateMap<RegisterRetailerResponse, RegisterRetailerResponseDto>();
+
+            // API Key Mapping
+            CreateMap<RotateCatalogApiKeyResponse, RotateCatalogApiKeyResponseDto>();
         }
     }
 }

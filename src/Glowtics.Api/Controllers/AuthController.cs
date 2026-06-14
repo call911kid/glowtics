@@ -2,10 +2,15 @@ using Glowtics.Api.DTOs.Requests;
 using Glowtics.Api.DTOs.Responses;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Commands.Auth;
+using Glowtics.BLL.Commands.Retailers;
+using Glowtics.BLL.Constants;
 using Glowtics.BLL.Orchestrators;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using AutoMapper;
+using System;
 
 namespace Glowtics.Api.Controllers
 {
@@ -41,6 +46,20 @@ namespace Glowtics.Api.Controllers
             var result = await _mediator.Send(command);
 
             var responseDto = _mapper.Map<RegisterRetailerResponseDto>(result);
+
+            return Ok(ApiResponse.Success(responseDto));
+        }
+
+        [Authorize(Roles = Roles.Retailer)]
+        [HttpPost("rotate-key")]
+        public async Task<IActionResult> RotateCatalogKey()
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var command = new RotateCatalogApiKeyCommand(userId);
+            var result = await _mediator.Send(command);
+
+            var responseDto = _mapper.Map<RotateCatalogApiKeyResponseDto>(result);
 
             return Ok(ApiResponse.Success(responseDto));
         }
