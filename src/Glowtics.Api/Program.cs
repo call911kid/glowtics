@@ -39,7 +39,9 @@ namespace Glowtics.Api
             // Register BLL Services
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IBllAssemblyMarker).Assembly));
             builder.Services.AddScoped<IJwtService, JwtService>();
+            builder.Services.AddSingleton<IApiKeyService, ApiKeyService>();
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
+            builder.Services.Configure<ApiKeySettings>(builder.Configuration.GetSection(ApiKeySettings.SectionName));
 
             // Register AutoMapper
             builder.Services.AddAutoMapper(cfg => cfg.AddMaps(
