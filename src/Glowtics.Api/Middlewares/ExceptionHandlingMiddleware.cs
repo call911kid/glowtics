@@ -47,6 +47,7 @@ namespace Glowtics.Api.Middleware
         private static HttpStatusCode GetStatusCode(Exception exception) => exception switch
         {
             BusinessRuleViolationException => HttpStatusCode.BadRequest,
+            InvalidCredentialsException => HttpStatusCode.Unauthorized,
             EntityNotFoundException => HttpStatusCode.NotFound,
             DatabaseProvisioningException => HttpStatusCode.InternalServerError,
             GlowticsException => HttpStatusCode.BadRequest,

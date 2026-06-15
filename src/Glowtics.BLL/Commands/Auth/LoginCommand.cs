@@ -30,13 +30,13 @@ namespace Glowtics.BLL.Commands.Auth
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new BadRequestException("Invalid email or password.");
+                throw new InvalidCredentialsException("Invalid Email or Password.");
             }
 
             var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!passwordValid)
             {
-                throw new BadRequestException("Invalid email or password.");
+                throw new InvalidCredentialsException("Invalid Email or Password");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
