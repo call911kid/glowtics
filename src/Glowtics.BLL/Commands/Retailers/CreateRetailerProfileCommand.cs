@@ -2,11 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using System.Threading.Tasks;
+using Glowtics.BLL.Exceptions;
 using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;
 using Glowtics.DAL.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Glowtics.BLL.Responses;
 
 namespace Glowtics.BLL.Commands.Retailers
@@ -26,6 +27,12 @@ namespace Glowtics.BLL.Commands.Retailers
 
         public async Task<CreateRetailerProfileResponse> Handle(CreateRetailerProfileCommand request, CancellationToken cancellationToken)
         {
+            var domainExists = await _dbContext.Retailers.AnyAsync(r => r.Domain == request.Domain, cancellationToken);
+            if (domainExists)
+            {
+                throw new BusinessRuleViolationException("A retailer with this domain already exists.");
+            }
+
             var retailer = new Retailer
             {
                 UserId = request.UserId,
