@@ -1,5 +1,6 @@
 using Glowtics.BLL.Commands.Identity;
 using Glowtics.BLL.Commands.Retailers;
+using Glowtics.BLL.Constants;
 using Glowtics.BLL.Responses;
 using Glowtics.DAL.Context;
 using MediatR;
@@ -25,14 +26,16 @@ namespace Glowtics.BLL.Orchestrators
         public async Task<RegisterRetailerResponse> Handle(RegisterRetailerOrchestratorRequest request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+            bool mongoCollectionCreated = false;
+            string collectionName = string.Empty;
 
             try
             {
-                var userId = await _mediator.Send(new CreateGlowticsUserCommand(request.Email, request.Password, "Retailer"), cancellationToken);
+                var userId = await _mediator.Send(new CreateGlowticsUserCommand(request.Email, request.Password, Roles.Retailer), cancellationToken);
 
-                
-                // var collectionName = await _mediator.Send(new CreateMongoCollectionCommand(request.Domain), cancellationToken);
-                var collectionName = $"retailer_{userId}";
+                collectionName = $"catalog_{userId}";
+                await _mediator.Send(new CreateMongoCollectionCommand(collectionName), cancellationToken);
+                mongoCollectionCreated = true;
 
                 var retailerProfile = await _mediator.Send(new CreateRetailerProfileCommand(userId, request.Domain, collectionName), cancellationToken);
 
@@ -49,6 +52,12 @@ namespace Glowtics.BLL.Orchestrators
             catch
             {
                 await transaction.RollbackAsync(cancellationToken);
+                
+                if (mongoCollectionCreated && !string.IsNullOrEmpty(collectionName))
+                {
+                    await _mediator.Send(new DeleteMongoCollectionCommand(collectionName), CancellationToken.None);
+                }
+
                 throw;
             }
         }
