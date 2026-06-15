@@ -27,14 +27,12 @@ namespace Glowtics.BLL.Commands.Identity
             var roleExists = await _roleManager.RoleExistsAsync(request.RoleName);
             if (roleExists)
             {
-                throw new BadRequestException("Role already exists.");
-                
+                throw new BusinessRuleViolationException("Role already exists.");
             }
             var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.RoleName));
             if (!result.Succeeded)
             {
-                throw new BadRequestException("Role creation failed.");
-            
+                throw new BusinessRuleViolationException("Role creation failed.", result.Errors.Select(e => e.Description));
             }
             
         }

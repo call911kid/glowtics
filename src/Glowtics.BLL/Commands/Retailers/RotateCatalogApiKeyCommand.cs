@@ -26,7 +26,7 @@ namespace Glowtics.BLL.Commands.Retailers
         public async Task<RotateCatalogApiKeyResponse> Handle(RotateCatalogApiKeyCommand request, CancellationToken cancellationToken)
         {
             var retailer = await _dbContext.Retailers.FirstOrDefaultAsync(r => r.UserId == request.UserId, cancellationToken)
-                ?? throw new NotFoundException($"Retailer profile for user {request.UserId} not found.");
+                ?? throw new EntityNotFoundException($"Retailer profile for user {request.UserId} not found.");
            
             var generatedKey = _apiKeyService.GenerateApiKey();
 

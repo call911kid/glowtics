@@ -38,15 +38,13 @@ namespace Glowtics.BLL.Commands.Identity
             var result =await  _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
-                throw new BadRequestException("User creation failed");
-                //result.Errors.Select(e => e.Description) for later use
+                throw new BusinessRuleViolationException("User creation failed", result.Errors.Select(e => e.Description));
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
             if(!roleResult.Succeeded)
             {
-                throw new BadRequestException("Adding user to role failed");
-                //roleResult.Errors.Select(e => e.Description) for later use
+                throw new BusinessRuleViolationException("Adding user to role failed", roleResult.Errors.Select(e => e.Description));
             }
 
             return user.Id;
