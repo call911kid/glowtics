@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -45,24 +46,22 @@ namespace Glowtics.Api.Middleware
 
         private static HttpStatusCode GetStatusCode(Exception exception) => exception switch
         {
-            BadRequestException => HttpStatusCode.BadRequest,
-            
-            // ValidationException => HttpStatusCode.BadRequest,
-            NotFoundException => HttpStatusCode.NotFound,
+            BusinessRuleViolationException => HttpStatusCode.BadRequest,
+            EntityNotFoundException => HttpStatusCode.NotFound,
+            DatabaseProvisioningException => HttpStatusCode.InternalServerError,
+            GlowticsException => HttpStatusCode.BadRequest,
             _ => HttpStatusCode.InternalServerError
         };
 
         private string GetMessage(Exception exception) => exception switch
         {
-            NotFoundException => exception.Message,
-            BadRequestException => exception.Message,
+            GlowticsException glowticsException => glowticsException.Message,
             _ => _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request."
         };
 
         private static List<string> GetErrors(Exception exception) => exception switch
         {
-            
-            // ValidationException validationException => validationException.Errors.Select(e => e.ErrorMessage).ToList(),
+            GlowticsException glowticsException => glowticsException.Errors.ToList(),
             _ => new List<string>()
         };
     }
