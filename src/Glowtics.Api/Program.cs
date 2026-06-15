@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using System.Text;
 
 namespace Glowtics.Api
@@ -31,6 +32,18 @@ namespace Glowtics.Api
 
             builder.Services.AddDbContext<GlowticsDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            var mongoConnectionString = builder.Configuration.GetConnectionString("MongoConnection") 
+                ?? throw new InvalidOperationException("Unable to find the MongoDB connection string.");
+            var mongoDatabaseName = builder.Configuration["MongoDatabaseName"] 
+                ?? throw new InvalidOperationException("Unable to find the MongoDB database name.");
+
+            builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString));
+            builder.Services.AddScoped<IMongoDatabase>(sp => 
+            {
+                var client = sp.GetRequiredService<IMongoClient>();
+                return client.GetDatabase(mongoDatabaseName);
+            });
 
             builder.Services.AddIdentityCore<GlowticsUser>()
            .AddRoles<IdentityRole<Guid>>()
