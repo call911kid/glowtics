@@ -45,9 +45,13 @@ namespace Glowtics.Api
                 return client.GetDatabase(mongoDatabaseName);
             });
 
-            builder.Services.AddIdentityCore<GlowticsUser>()
+            builder.Services.AddIdentityCore<GlowticsUser>(options =>
+            {
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            })
            .AddRoles<IdentityRole<Guid>>()
-           .AddEntityFrameworkStores<GlowticsDbContext>();
+           .AddEntityFrameworkStores<GlowticsDbContext>()
+           .AddDefaultTokenProviders();
 
             // Register BLL Services
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IBllAssemblyMarker).Assembly));
