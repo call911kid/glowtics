@@ -2,6 +2,7 @@ using Glowtics.Api.DTOs.Requests;
 using Glowtics.Api.DTOs.Responses;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Commands.Auth;
+using Glowtics.BLL.Commands.Identity;
 using Glowtics.BLL.Commands.Retailers;
 using Glowtics.BLL.Constants;
 using Glowtics.BLL.Orchestrators;
@@ -62,6 +63,15 @@ namespace Glowtics.Api.Controllers
             var responseDto = _mapper.Map<RotateCatalogApiKeyResponseDto>(result);
 
             return Ok(ApiResponse.Success(responseDto));
+        }
+
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequestDto request)
+        {
+            var command = new ConfirmEmailCommand(request.Email, request.Otp);
+            await _mediator.Send(command);
+
+            return Ok(ApiResponse.Success());
         }
     }
 }
