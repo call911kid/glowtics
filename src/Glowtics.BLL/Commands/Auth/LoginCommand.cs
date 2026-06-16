@@ -38,6 +38,11 @@ namespace Glowtics.BLL.Commands.Auth
             {
                 throw new InvalidCredentialsException("Invalid Email or Password");
             }
+            var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+            if (!isEmailConfirmed)
+            {
+                throw new AccountRestrictedException("Please confirm your email address before logging in.");
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
 
