@@ -61,10 +61,33 @@ namespace Glowtics.Api.Middleware
             _ => _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request."
         };
 
-        private static List<string> GetErrors(Exception exception) => exception switch
+        private List<string> GetErrors(Exception exception)
         {
-            GlowticsException glowticsException => glowticsException.Errors.ToList(),
-            _ => new List<string>()
-        };
+            var errors = new List<string>();
+
+            if (exception is GlowticsException glowticsException)
+            {
+                errors.AddRange(glowticsException.Errors);
+            }
+
+            if (_env.IsDevelopment())
+            {
+                var inner = exception.InnerException;
+                while (inner != null)
+                {
+                    errors.Add($"Inner Exception: {inner.Message}");
+                    inner = inner.InnerException;
+                }
+
+                if (!string.IsNullOrWhiteSpace(exception.StackTrace))
+                {
+                    errors.Add("--- Stack Trace ---");
+                    var stackLines = exception.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    errors.AddRange(stackLines.Select(line => line.Trim()));
+                }
+            }
+
+            return errors;
+        }
     }
 }
