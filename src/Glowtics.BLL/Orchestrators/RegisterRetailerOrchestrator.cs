@@ -41,6 +41,8 @@ namespace Glowtics.BLL.Orchestrators
 
                 await transaction.CommitAsync(cancellationToken);
 
+                await _mediator.Send(new SendConfirmationEmailCommand(userId), cancellationToken);
+
                 return new RegisterRetailerResponse
                 {
                     Id = retailerProfile.Id,
@@ -48,6 +50,7 @@ namespace Glowtics.BLL.Orchestrators
                     Domain = retailerProfile.Domain
 
                 };
+
             }
             catch
             {
