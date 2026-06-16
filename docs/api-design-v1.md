@@ -270,6 +270,119 @@ No body required.
 
 ---
 
+### `POST /v1/auth/confirm-email`
+
+Confirms a newly registered retailer's email using a 6-digit OTP.
+
+#### Request
+
+```json
+{
+  "email": "string (required) — valid email format",
+  "otp": "string (required) — 6 digits"
+}
+```
+
+#### Response — `200 OK`
+
+```json
+{
+  "message": "Your email has been successfully confirmed. You may now log in."
+}
+```
+
+#### Errors
+
+| Status | Type | Condition |
+|---|---|---|
+| `400` | `VALIDATION_ERROR` | Missing fields, invalid OTP format, wrong OTP, or expired OTP. |
+
+---
+
+### `POST /v1/auth/forgot-password`
+
+Triggers a password reset email. Instantly invalidates any previously generated active OTPs for this account to maximize security.
+
+#### Request
+
+```json
+{
+  "email": "string (required) — valid email format"
+}
+```
+
+#### Response — `200 OK`
+
+Returns a generic success message regardless of whether the email exists in the system (prevents email enumeration attacks).
+
+```json
+{
+  "message": "If an account with that email exists, we have sent a password reset OTP."
+}
+```
+
+---
+
+### `POST /v1/auth/reset-password`
+
+Verifies the OTP and sets a new password for unauthenticated users.
+
+#### Request
+
+```json
+{
+  "email": "string (required) — valid email format",
+  "otp": "string (required) — 6 digits",
+  "newPassword": "string (required) — minimum 8 characters"
+}
+```
+
+#### Response — `200 OK`
+
+```json
+{
+  "message": "Your password has been successfully reset. You may now log in."
+}
+```
+
+#### Errors
+
+| Status | Type | Condition |
+|---|---|---|
+| `400` | `VALIDATION_ERROR` | Wrong OTP, expired OTP, or new password doesn't meet complexity requirements. |
+
+---
+
+### `POST /v1/auth/change-password`
+
+Allows an *authenticated* user to change their password.
+
+#### Auth
+
+`Authorization: Bearer <jwt_token>`
+
+#### Request
+
+```json
+{
+  "currentPassword": "string (required)",
+  "newPassword": "string (required) — minimum 8 characters"
+}
+```
+
+#### Response — `200 OK`
+
+Empty JSON body on success.
+
+#### Errors
+
+| Status | Type | Condition |
+|---|---|---|
+| `400` | `VALIDATION_ERROR` | Incorrect current password, or new password doesn't meet complexity requirements. |
+| `401` | `UNAUTHORIZED` | Missing, expired, or invalid JWT. |
+
+---
+
 ## 2. Profile Endpoints
 
 ### `GET /v1/profile`
