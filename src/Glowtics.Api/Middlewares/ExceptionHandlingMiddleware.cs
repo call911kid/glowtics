@@ -48,6 +48,7 @@ namespace Glowtics.Api.Middleware
         {
             BusinessRuleViolationException => HttpStatusCode.BadRequest,
             InvalidCredentialsException => HttpStatusCode.Unauthorized,
+            AccountRestrictedException => HttpStatusCode.Forbidden,
             EntityNotFoundException => HttpStatusCode.NotFound,
             DatabaseProvisioningException => HttpStatusCode.InternalServerError,
             GlowticsException => HttpStatusCode.BadRequest,
