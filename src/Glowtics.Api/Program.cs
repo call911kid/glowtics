@@ -48,6 +48,7 @@ namespace Glowtics.Api
             builder.Services.AddIdentityCore<GlowticsUser>(options =>
             {
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+                options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
             })
            .AddRoles<IdentityRole<Guid>>()
            .AddEntityFrameworkStores<GlowticsDbContext>()
