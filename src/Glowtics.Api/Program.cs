@@ -3,6 +3,7 @@ using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Services;
 using Glowtics.BLL.Settings;
 using Glowtics.Api.Middleware;
+using Microsoft.AspNetCore.Authentication;
 using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using System.Text;
+using Glowtics.Api.Authentication;
 
 namespace Glowtics.Api
 {
@@ -87,7 +89,8 @@ namespace Glowtics.Api
                     ValidAudience = jwtSettings?.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key ?? string.Empty))
                 };
-            });
+            })
+            .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("ApiKey", null);
 
             var app = builder.Build();
 
