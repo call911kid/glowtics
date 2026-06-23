@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +18,8 @@ namespace Glowtics.DAL.Configurations
             builder.Property(ds => ds.SkinProfileResult)
                 .IsRequired();
 
-            builder.Property(ds => ds.RecommendedProducts)
-                .IsRequired();
+            builder.HasMany(ds => ds.RecommendedProducts)
+                .WithMany(p => p.DiagnosticSessions);
 
             builder.Property(ds => ds.CreatedAt)
                 .IsRequired();

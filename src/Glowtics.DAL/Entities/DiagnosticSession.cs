@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ namespace Glowtics.DAL.Entities
 
         public string SkinProfileResult { get; set; }
 
-        public string RecommendedProducts { get; set; }
+        public ICollection<Product> RecommendedProducts { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

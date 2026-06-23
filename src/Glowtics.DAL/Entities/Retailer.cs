@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,10 +38,12 @@ namespace Glowtics.DAL.Entities
         public GlowticsUser User { get; set; }
 
         public ICollection<DiagnosticSession> DiagnosticSessions { get; set; }
+        public ICollection<Product> Products { get; set; }
 
         public Retailer()
         {
             DiagnosticSessions = new HashSet<DiagnosticSession>();
+            Products = new HashSet<Product>();
         }
     }
 }
