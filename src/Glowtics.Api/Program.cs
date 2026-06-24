@@ -61,6 +61,7 @@ namespace Glowtics.Api
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddSingleton<IApiKeyService, ApiKeyService>();
             builder.Services.AddTransient<IEmailService, SmtpEmailService>();
+            builder.Services.AddTransient<IEmailNotificationService, EmailNotificationService>();
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
             builder.Services.Configure<ApiKeySettings>(builder.Configuration.GetSection(ApiKeySettings.SectionName));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
