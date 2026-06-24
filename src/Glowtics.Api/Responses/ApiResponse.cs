@@ -1,45 +1,52 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Glowtics.Api.Responses
 {
     public class ApiResponse
     {
         public bool IsSuccess { get; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? ErrorCode { get; }
         public string Message { get; }
-        public List<string> Errors { get; }
+        
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string>? Errors { get; }
 
-        protected ApiResponse(bool isSuccess, string message, List<string> errors)
+        protected ApiResponse(bool isSuccess, string? errorCode, string message, List<string>? errors)
         {
             IsSuccess = isSuccess;
+            ErrorCode = errorCode;
             Message = message;
-            Errors = errors ?? new List<string>();
+            Errors = isSuccess ? null : (errors ?? new List<string>());
         }
 
         public static ApiResponse Success(string message = "Request completed successfully.")
-            => new ApiResponse(true, message, new List<string>());
+            => new ApiResponse(true, null, message, null);
 
-        public static ApiResponse Failure(string message, List<string> errors)
-            => new ApiResponse(false, message, errors);
+        public static ApiResponse Failure(string errorCode, string message, List<string> errors)
+            => new ApiResponse(false, errorCode, message, errors);
 
         public static ApiResponse<T> Success<T>(T data, string message = "Request completed successfully.")
             => ApiResponse<T>.Success(data, message);
 
-        public static ApiResponse<T> Failure<T>(string message, List<string> errors)
-            => ApiResponse<T>.Failure(message, errors);
+        public static ApiResponse<T> Failure<T>(string errorCode, string message, List<string> errors)
+            => ApiResponse<T>.Failure(errorCode, message, errors);
     }
 
     public class ApiResponse<T> : ApiResponse
     {
+        [JsonPropertyOrder(5)]
         public T Data { get; }
 
         private ApiResponse(T data, string message)
-            : base(true, message, new List<string>())
+            : base(true, null, message, null)
         {
             Data = data;
         }
 
-        private ApiResponse(string message, List<string> errors)
-            : base(false, message, errors)
+        private ApiResponse(string errorCode, string message, List<string> errors)
+            : base(false, errorCode, message, errors)
         {
             Data = default!;
         }
@@ -47,7 +54,7 @@ namespace Glowtics.Api.Responses
         public static ApiResponse<T> Success(T data, string message = "Request completed successfully.")
             => new ApiResponse<T>(data, message);
 
-        public static new ApiResponse<T> Failure(string message, List<string> errors)
-            => new ApiResponse<T>(message, errors);
+        public static new ApiResponse<T> Failure(string errorCode, string message, List<string> errors)
+            => new ApiResponse<T>(errorCode, message, errors);
     }
 }

@@ -2,7 +2,7 @@ using Glowtics.BLL;
 using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Services;
 using Glowtics.BLL.Settings;
-using Glowtics.Api.Middleware;
+using Glowtics.Api.Middlewares;
 using Microsoft.AspNetCore.Authentication;
 using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;

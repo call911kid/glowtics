@@ -7,6 +7,7 @@ using Glowtics.BLL.Exceptions;
 using Glowtics.DAL.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Identity
 {
@@ -38,13 +39,13 @@ namespace Glowtics.BLL.Commands.Identity
             var result =await  _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
-                throw new BusinessRuleViolationException("User creation failed", result.Errors.Select(e => e.Description));
+                throw new BusinessRuleViolationException(ErrorCodes.UserCreationFailed, result.Errors.Select(e => e.Description));
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
             if(!roleResult.Succeeded)
             {
-                throw new BusinessRuleViolationException("Adding user to role failed", roleResult.Errors.Select(e => e.Description));
+                throw new BusinessRuleViolationException(ErrorCodes.RoleAssignmentFailed, roleResult.Errors.Select(e => e.Description));
             }
 
             return user.Id;
@@ -52,3 +53,4 @@ namespace Glowtics.BLL.Commands.Identity
         }
     }
 }
+

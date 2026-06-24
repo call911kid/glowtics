@@ -7,6 +7,7 @@ using Glowtics.DAL.Context;
 using Glowtics.BLL.Responses;
 using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Exceptions;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Retailers
 {
@@ -26,7 +27,7 @@ namespace Glowtics.BLL.Commands.Retailers
         public async Task<RotateCatalogApiKeyResponse> Handle(RotateCatalogApiKeyCommand request, CancellationToken cancellationToken)
         {
             var retailer = await _dbContext.Retailers.FirstOrDefaultAsync(r => r.UserId == request.UserId, cancellationToken)
-                ?? throw new EntityNotFoundException($"Retailer profile for user {request.UserId} not found.");
+                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Retailer profile for user {request.UserId} not found.");
            
             var generatedKey = _apiKeyService.GenerateApiKey();
 
@@ -43,3 +44,4 @@ namespace Glowtics.BLL.Commands.Retailers
         }
     }
 }
+

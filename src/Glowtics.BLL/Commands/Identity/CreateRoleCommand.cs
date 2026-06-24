@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Glowtics.BLL.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Identity
 {
@@ -27,12 +28,12 @@ namespace Glowtics.BLL.Commands.Identity
             var roleExists = await _roleManager.RoleExistsAsync(request.RoleName);
             if (roleExists)
             {
-                throw new BusinessRuleViolationException("Role already exists.");
+                throw new BusinessRuleViolationException(ErrorCodes.RoleAlreadyExists);
             }
             var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.RoleName));
             if (!result.Succeeded)
             {
-                throw new BusinessRuleViolationException("Role creation failed.", result.Errors.Select(e => e.Description));
+                throw new BusinessRuleViolationException(ErrorCodes.RoleCreationFailed, result.Errors.Select(e => e.Description));
             }
             
         }
@@ -40,3 +41,4 @@ namespace Glowtics.BLL.Commands.Identity
 
 
 }
+

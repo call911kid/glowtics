@@ -9,6 +9,7 @@ using Glowtics.DAL.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Identity
 {
@@ -32,7 +33,7 @@ namespace Glowtics.BLL.Commands.Identity
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
             {
-                throw new BusinessRuleViolationException("User not found.");
+                throw new EntityNotFoundException(ErrorCodes.UserNotFound);
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -58,3 +59,4 @@ namespace Glowtics.BLL.Commands.Identity
         }
     }
 }
+

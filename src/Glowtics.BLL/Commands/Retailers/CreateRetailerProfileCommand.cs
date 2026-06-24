@@ -9,6 +9,7 @@ using Glowtics.DAL.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Glowtics.BLL.Responses;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Retailers
 {
@@ -30,7 +31,7 @@ namespace Glowtics.BLL.Commands.Retailers
             var domainExists = await _dbContext.Retailers.AnyAsync(r => r.Domain == request.Domain, cancellationToken);
             if (domainExists)
             {
-                throw new BusinessRuleViolationException("A retailer with this domain already exists.");
+                throw new BusinessRuleViolationException(ErrorCodes.DomainAlreadyRegistered);
             }
 
             var retailer = new Retailer
@@ -50,3 +51,4 @@ namespace Glowtics.BLL.Commands.Retailers
         }
     }
 }
+

@@ -6,6 +6,7 @@ using Glowtics.BLL.Exceptions;
 using Glowtics.DAL.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Commands.Identity
 {
@@ -25,17 +26,18 @@ namespace Glowtics.BLL.Commands.Identity
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
             {
-                throw new EntityNotFoundException("User not found.");
+                throw new EntityNotFoundException(ErrorCodes.UserNotFound);
             }
 
             var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
-                throw new BusinessRuleViolationException("Failed to change password.", errors);
+                throw new BusinessRuleViolationException(ErrorCodes.PasswordChangeFailed, errors);
             }
 
             return true;
         }
     }
 }
+

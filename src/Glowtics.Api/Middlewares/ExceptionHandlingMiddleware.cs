@@ -1,24 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
-namespace Glowtics.Api.Middleware
+namespace Glowtics.Api.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IHostEnvironment _env;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, IHostEnvironment env)
+        public ExceptionHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -27,67 +23,49 @@ namespace Glowtics.Api.Middleware
             {
                 await _next(context);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                await HandleExceptionAsync(context, e);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
         public async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var statusCode = GetStatusCode(exception);
+            var errorCode = GetErrorCode(exception);
             var message = GetMessage(exception);
             var errors = GetErrors(exception);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
-            await context.Response.WriteAsJsonAsync(ApiResponse.Failure(message, errors));
+            await context.Response.WriteAsJsonAsync(ApiResponse.Failure(errorCode, message, new List<string>(errors)));
         }
+
+        private static string GetErrorCode(Exception exception) => exception switch
+        {
+            GlowticsException glowticsException => glowticsException.ErrorCode,
+            _ => "ERR_INTERNAL_SERVER_ERROR"
+        };
 
         private static HttpStatusCode GetStatusCode(Exception exception) => exception switch
         {
-            BusinessRuleViolationException => HttpStatusCode.BadRequest,
             InvalidCredentialsException => HttpStatusCode.Unauthorized,
-            AccountRestrictedException => HttpStatusCode.Forbidden,
             EntityNotFoundException => HttpStatusCode.NotFound,
-            DatabaseProvisioningException => HttpStatusCode.InternalServerError,
-            GlowticsException => HttpStatusCode.BadRequest,
+            BusinessRuleViolationException => HttpStatusCode.BadRequest,
+            AccountRestrictedException => HttpStatusCode.Forbidden,
             _ => HttpStatusCode.InternalServerError
         };
 
-        private string GetMessage(Exception exception) => exception switch
+        private static string GetMessage(Exception exception) => exception switch
         {
             GlowticsException glowticsException => glowticsException.Message,
-            _ => _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request."
+            _ => "An unexpected error occurred."
         };
 
-        private List<string> GetErrors(Exception exception)
+        private static IEnumerable<string> GetErrors(Exception exception) => exception switch
         {
-            var errors = new List<string>();
-
-            if (exception is GlowticsException glowticsException)
-            {
-                errors.AddRange(glowticsException.Errors);
-            }
-
-            if (_env.IsDevelopment())
-            {
-                var inner = exception.InnerException;
-                while (inner != null)
-                {
-                    errors.Add($"Inner Exception: {inner.Message}");
-                    inner = inner.InnerException;
-                }
-
-                if (!string.IsNullOrWhiteSpace(exception.StackTrace))
-                {
-                    errors.Add("--- Stack Trace ---");
-                    var stackLines = exception.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                    errors.AddRange(stackLines.Select(line => line.Trim()));
-                }
-            }
-
-            return errors;
-        }
+            GlowticsException glowticsException => glowticsException.Errors,
+            _ => Array.Empty<string>()
+        };
     }
 }
