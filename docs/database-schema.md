@@ -1,7 +1,7 @@
 # Glowtics — Database Schema
 
 > This document details the SQL Server schema for the Glowtics backend.
-> Note: Product catalogs and embeddings are stored in MongoDB and are omitted from this SQL schema.
+> Note: Product vector embeddings are stored in MongoDB. A local copy of product metadata is stored in SQL Server for dashboard analytics.
 
 ---
 
@@ -38,7 +38,21 @@ Holds the Glowtics-specific tenant profile and business logic configurations.
 
 ---
 
-## 3. `DiagnosticSessions`
+## 3. `Products`
+A relational copy of the retailer's product catalog used exclusively for fast dashboard analytics. It is kept in sync with MongoDB but does not contain embeddings.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `Id` | `uniqueidentifier` | Primary Key | GUID for the Product in SQL Server. |
+| `RetailerId` | `uniqueidentifier` | Foreign Key | Maps to `Retailers.Id`. |
+| `ExternalProductId`| `nvarchar(256)` | | The ID the retailer uses natively. |
+| `Name` | `nvarchar(256)` | | The normalized product name. |
+| `IsAvailable` | `bit` | | Stock status. |
+| `IsDeleted` | `bit` | | Soft-delete flag. Kept true instead of hard deleting to preserve dashboard history. |
+
+---
+
+## 4. `DiagnosticSessions`
 Tracks the history of end-user diagnoses to power retailer analytics dashboards.
 
 | Column | Type | Constraints | Description |
@@ -46,8 +60,17 @@ Tracks the history of end-user diagnoses to power retailer analytics dashboards.
 | `Id` | `uniqueidentifier` | Primary Key | Session identifier. |
 | `RetailerId` | `uniqueidentifier` | Foreign Key | Maps to `Retailers.Id`. Identifies the storefront. |
 | `SkinProfileResult` | `nvarchar(max)` | JSON | Structured output from the AI's photo analysis (e.g., conditions, acne severity). |
-| `RecommendedProducts`| `nvarchar(max)` | JSON | Array of `productId`s and the LLM's rationale for recommending them. |
 | `CreatedAt` | `datetime2` | | Timestamp of the diagnosis. |
+
+---
+
+## 5. `DiagnosticSessionProduct` (Implicit Junction)
+Managed automatically by EF Core to represent the many-to-many skip navigation between `DiagnosticSessions` and `Products`.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `DiagnosticSessionsId` | `uniqueidentifier` | Foreign Key | Maps to `DiagnosticSessions.Id` |
+| `ProductsId` | `uniqueidentifier` | Foreign Key | Maps to `Products.Id` |
 
 ---
 
