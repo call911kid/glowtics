@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Text;
 using Glowtics.Api.Authentication;
@@ -65,6 +66,14 @@ namespace Glowtics.Api
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
             builder.Services.Configure<ApiKeySettings>(builder.Configuration.GetSection(ApiKeySettings.SectionName));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.Configure<LangflowSettings>(builder.Configuration.GetSection(LangflowSettings.SectionName));
+
+            builder.Services.AddHttpClient<ILangflowService, LangflowService>((provider, client) => 
+            {
+                var settings = provider.GetRequiredService<IOptions<LangflowSettings>>().Value;
+                client.BaseAddress = new Uri(settings.BaseUrl);
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {settings.ApiKey}");
+            });
 
             // Register AutoMapper
             builder.Services.AddAutoMapper(cfg => cfg.AddMaps(
