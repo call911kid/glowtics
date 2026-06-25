@@ -68,7 +68,11 @@ X-Glowtics-Key: <api_key>
 |---|---|---|
 | `POST /v1/auth/register` | None | — |
 | `POST /v1/auth/login` | None | — |
+| `POST /v1/auth/confirm-email` | None | — |
+| `POST /v1/auth/forgot-password` | None | — |
+| `POST /v1/auth/reset-password` | None | — |
 | `POST /v1/auth/rotate-key` | JWT | `Authorization: Bearer <token>` |
+| `POST /v1/auth/change-password` | JWT | `Authorization: Bearer <token>` |
 | `GET /v1/profile` | JWT | `Authorization: Bearer <token>` |
 | `PATCH /v1/profile` | JWT | `Authorization: Bearer <token>` |
 | `* /v1/catalog/**` | API Key | `X-Glowtics-Key: <key>` |
