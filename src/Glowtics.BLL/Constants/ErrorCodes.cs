@@ -22,5 +22,8 @@ namespace Glowtics.BLL.Constants
         public const string RoleAlreadyExists = "ERR_ROLE_ALREADY_EXISTS";
         public const string RoleCreationFailed = "ERR_ROLE_CREATION_FAILED";
         public const string RoleAssignmentFailed = "ERR_ROLE_ASSIGNMENT_FAILED";
+
+        // Infrastructure & Integration Errors
+        public const string EmbeddingGenerationFailed = "ERR_EMBEDDING_GENERATION_FAILED";
     }
 }

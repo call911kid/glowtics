@@ -53,6 +53,7 @@ namespace Glowtics.Api.Middlewares
             EntityNotFoundException => HttpStatusCode.NotFound,
             BusinessRuleViolationException => HttpStatusCode.BadRequest,
             AccountRestrictedException => HttpStatusCode.Forbidden,
+            ExternalServiceException => HttpStatusCode.BadGateway,
             _ => HttpStatusCode.InternalServerError
         };
 
