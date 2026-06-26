@@ -62,12 +62,93 @@ namespace Glowtics.BLL.Services
             }
         }
 
-        public Task<LangflowDiagnosisResult> DiagnoseAsync(byte[] photoBytes, string fileName, string collectionName, CancellationToken cancellationToken = default)
+        public async Task<LangflowDiagnosisResult> DiagnoseAsync(byte[] photoBytes, string fileName, string collectionName, CancellationToken cancellationToken = default)
         {
-            // TODO: Implement the 2-step Langflow API call:
-            // 1. Upload photo to /api/v1/files/upload/{flow_id}
-            // 2. Call /api/v1/run/{flow_id} with the uploaded file path
-            throw new NotImplementedException("Langflow API integration for diagnosis is pending.");
+            // 1. Upload photo to Langflow
+            using var content = new MultipartFormDataContent();
+            var fileContent = new ByteArrayContent(photoBytes);
+            content.Add(fileContent, "file", fileName);
+
+            var uploadResponse = await _httpClient.PostAsync($"files/upload/{_settings.FlowId}", content, cancellationToken);
+            if (!uploadResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalServiceException(ErrorCodes.InternalServerError, "Failed to upload image to Langflow.");
+            }
+
+            var uploadResult = await uploadResponse.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: cancellationToken);
+            var filePath = uploadResult.GetProperty("file_path").GetString();
+
+            // 2. Call /api/v1/run to execute pipeline
+            var runPayload = new
+            {
+                output_type = "chat",
+                input_type = "chat",
+                tweaks = new Dictionary<string, object>
+                {
+                    {
+                        "ChatInput", new 
+                        {
+                            files = new[] { filePath },
+                            input_value = ""
+                        }
+                    }
+                    /*,
+                    {
+                        "MongoDBAtlasVector-BIfTP", new 
+                        {
+                            collection_name = collectionName
+                        }
+                    }*/
+                }
+            };
+
+            var runResponse = await _httpClient.PostAsJsonAsync($"run/{_settings.FlowId}?stream=false", runPayload, cancellationToken);
+            if (!runResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalServiceException(ErrorCodes.InternalServerError, "Failed to execute Langflow pipeline.");
+            }
+
+            var runResult = await runResponse.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: cancellationToken);
+            
+            // 3. Parse Response
+            string? routineJson = null;
+            string? rejectionText = null;
+
+            var outputs = runResult.GetProperty("outputs")[0].GetProperty("outputs");
+            foreach (var output in outputs.EnumerateArray())
+            {
+                if (output.TryGetProperty("results", out var results) && 
+                    results.TryGetProperty("message", out var message) && 
+                    message.TryGetProperty("text", out var textElement))
+                {
+                    var text = textElement.GetString();
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        if (text.TrimStart().StartsWith("{"))
+                        {
+                            routineJson = text;
+                        }
+                        else
+                        {
+                            rejectionText = text;
+                        }
+                    }
+                }
+            }
+
+            if (routineJson == null)
+            {
+                // Must be a rejection (e.g. "Image rejected...")
+                throw new ExternalServiceException(ErrorCodes.BusinessRuleViolation, rejectionText ?? "Analysis failed with unknown error.");
+            }
+
+            var routineObj = JsonSerializer.Deserialize<LangflowRoutineResponse>(routineJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return new LangflowDiagnosisResult
+            {
+                SkinProfileResult = routineJson,
+                ExternalProductIds = routineObj?.Routine?.Select(r => r.ProductId).ToList() ?? new List<string>()
+            };
         }
     }
 }

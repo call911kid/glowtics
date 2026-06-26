@@ -73,6 +73,7 @@ namespace Glowtics.Api
                 var settings = provider.GetRequiredService<IOptions<LangflowSettings>>().Value;
                 client.BaseAddress = new Uri(settings.BaseUrl);
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {settings.ApiKey}");
+                client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
             });
 
             // Register AutoMapper
