@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Glowtics.Api.DTOs.Requests;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Orchestrators;
 using MediatR;
@@ -21,23 +22,23 @@ namespace Glowtics.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Analyze([FromForm] IFormFile photo, [FromForm] string domain)
+        public async Task<IActionResult> Analyze([FromForm] AnalyzeRequestDto request)
         {
-            if (photo == null || photo.Length == 0)
+            if (request.Photo == null || request.Photo.Length == 0)
             {
                 return BadRequest(ApiResponse.Failure("ERR_VALIDATION", "Validation failed", new List<string> { "Photo is required." }));
             }
 
-            if (string.IsNullOrWhiteSpace(domain))
+            if (string.IsNullOrWhiteSpace(request.Domain))
             {
                 return BadRequest(ApiResponse.Failure("ERR_VALIDATION", "Validation failed", new List<string> { "Domain is required." }));
             }
 
             using var memoryStream = new MemoryStream();
-            await photo.CopyToAsync(memoryStream);
+            await request.Photo.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            var command = new AnalyzeOrchestratorRequest(photoBytes, photo.FileName, domain);
+            var command = new AnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Domain);
             
             var result = await _mediator.Send(command);
 
