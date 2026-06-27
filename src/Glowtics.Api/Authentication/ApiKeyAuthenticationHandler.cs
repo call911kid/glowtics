@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Glowtics.BLL.Queries.Auth;
 using MediatR;
@@ -39,7 +39,8 @@ namespace Glowtics.Api.Authentication
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, response.UserId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, response.UserId.ToString()),
+                new Claim("RetailerId", response.RetailerId.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, Scheme.Name);

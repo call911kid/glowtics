@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Glowtics.BLL.Queries.Auth
 {
-    public record ValidateApiKeyResponse(Guid UserId);
+    public record ValidateApiKeyResponse(Guid UserId, Guid RetailerId);
 
     public record ValidateApiKeyQuery(string RawKey) : IRequest<ValidateApiKeyResponse>;
 
@@ -38,7 +38,7 @@ namespace Glowtics.BLL.Queries.Auth
                 throw new AccountRestrictedException("Retailer is inactive.");
             }
 
-            return new ValidateApiKeyResponse(retailer.UserId);
+            return new ValidateApiKeyResponse(retailer.UserId, retailer.Id);
         }
     }
 }
