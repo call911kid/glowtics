@@ -25,7 +25,33 @@ namespace Glowtics.Api
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
+
+            builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        var errors = context.ModelState.Keys
+                            .SelectMany(key => context.ModelState[key]!.Errors.Select(error => $"{key}: {error.ErrorMessage}"))
+                            .ToList();
+
+                        var response = ApiResponse.Failure("VALIDATION_ERROR", "One or more fields failed validation.", errors);
+                        return new BadRequestObjectResult(response);
+                    };
+                });
+            builder.Services.AddFluentValidationAutoValidation()
+                            .AddFluentValidationClientsideAdapters()
+                            .AddValidatorsFromAssembly(typeof(Program).Assembly);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
