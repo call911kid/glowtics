@@ -14,7 +14,7 @@ namespace Glowtics.BLL.Orchestrators
 {
     public record UpdateProductAvailabilityOrchestratorRequest(
         Guid RetailerId, 
-        Guid ProductId,
+        string ExternalProductId,
         bool IsAvailable
     ) : IRequest<UpdateProductAvailabilityResponse>;
 
@@ -41,12 +41,11 @@ namespace Glowtics.BLL.Orchestrators
                 ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Entity 'Retailer' ({request.RetailerId}) was not found.");
 
             var product = await _dbContext.Products
-                .Where(p => p.Id == request.ProductId && p.RetailerId == retailer.Id)
-                .Select(p => new { p.ExternalProductId, p.IsAvailable })
+                .Where(p => p.ExternalProductId == request.ExternalProductId && p.RetailerId == retailer.Id)
+                .Select(p => new { p.Id, p.ExternalProductId, p.IsAvailable })
                 .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.ProductNotFound, $"Entity 'Product' ({request.ProductId}) was not found.");
+                ?? throw new EntityNotFoundException(ErrorCodes.ProductNotFound, $"Entity 'Product' ({request.ExternalProductId}) was not found.");
 
-            // If the requested state matches the current state, exit early
             if (product.IsAvailable == request.IsAvailable)
             {
                 return new UpdateProductAvailabilityResponse { Success = true };
@@ -56,14 +55,12 @@ namespace Glowtics.BLL.Orchestrators
 
             try
             {
-                // 1. Update SQL Server entity
                 await _mediator.Send(new UpdateProductAvailabilityCommand(
-                    request.ProductId, 
+                    product.Id, 
                     retailer.Id, 
                     request.IsAvailable
                 ), cancellationToken);
 
-                // 2. Update MongoDB vector document
                 await _mediator.Send(new UpdateEmbeddingAvailabilityCommand(
                     retailer.MongoCollectionName, 
                     product.ExternalProductId, 

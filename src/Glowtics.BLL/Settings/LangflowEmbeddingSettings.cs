@@ -8,6 +8,8 @@ namespace Glowtics.BLL.Settings
         public string? ApiKey { get; init; }
         public string? HfApiKey { get; init; }
         public string? MongoUri { get; init; }
+        public string? DbName { get; init; }
+        public string? CollectionName { get; init; }
         public string? NgrokUser { get; init; }
         public string? NgrokPass { get; init; }
     }

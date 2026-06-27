@@ -12,13 +12,11 @@ using Glowtics.BLL.Constants;
 
 namespace Glowtics.BLL.Orchestrators
 {
-    // The Request
     public record DeleteProductOrchestratorRequest(
         Guid RetailerId, 
-        Guid ProductId
+        string ExternalProductId
     ) : IRequest<DeleteProductResponse>;
 
-    // The Response
     public class DeleteProductResponse
     {
         public bool Success { get; set; }
@@ -42,8 +40,8 @@ namespace Glowtics.BLL.Orchestrators
                 ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Entity 'Retailer' ({request.RetailerId}) was not found.");
 
             var product = await _dbContext.Products
-                .Where(p => p.Id == request.ProductId && p.RetailerId == retailer.Id)
-                .Select(p => new { p.ExternalProductId })
+                .Where(p => p.ExternalProductId == request.ExternalProductId && p.RetailerId == retailer.Id)
+                .Select(p => new { p.Id, p.ExternalProductId })
                 .FirstOrDefaultAsync(cancellationToken)
                 ?? throw new EntityNotFoundException(ErrorCodes.ProductNotFound, "No Product found with the given Id.");
 
@@ -51,10 +49,8 @@ namespace Glowtics.BLL.Orchestrators
             using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
             try
             {
-                // 1. Soft-delete the product in SQL via DeleteProductCommand
-                await _mediator.Send(new DeleteProductCommand(request.ProductId, retailer.Id), cancellationToken);
+                await _mediator.Send(new DeleteProductCommand(product.Id, retailer.Id), cancellationToken);
 
-                // 2. Delete from MongoDB using DeleteEmbeddingCommand
                 await _mediator.Send(new DeleteEmbeddingCommand(retailer.MongoCollectionName, product.ExternalProductId), cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);

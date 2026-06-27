@@ -67,6 +67,7 @@ namespace Glowtics.BLL.Orchestrators
                 var embeddingCommand = new AddEmbeddingCommand(
                     retailer.MongoCollectionName,
                     request.ExternalProductId,
+                    request.Name,
                     request.TargetConditions,
                     request.ActiveIngredients,
                     request.Conflicts

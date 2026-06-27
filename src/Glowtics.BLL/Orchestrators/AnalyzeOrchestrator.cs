@@ -8,15 +8,28 @@ using Glowtics.BLL.Interfaces;
 using Glowtics.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Glowtics.BLL.Orchestrators
 {
-    public record AnalyzeOrchestratorRequest(byte[] PhotoBytes, string FileName, string Domain) : IRequest<AnalyzeResponse>;
+    public record AnalyzeOrchestratorRequest(byte[] PhotoBytes, string FileName, string ContentType, string Domain) : IRequest<AnalyzeResponse>;
 
     public class AnalyzeResponse
     {
-        public Guid SessionId { get; set; }
-        public string SkinProfileResult { get; set; } = string.Empty;
+        public List<RecommendedProductDto> Products { get; set; } = new();
+        public string? CartRedirectUrl { get; set; }
+    }
+
+    public class RecommendedProductDto
+    {
+        public string Rationale { get; set; } = string.Empty;
+
+        public string ExternalProductId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public bool IsAvailable { get; set; }
+        public List<string> ActiveIngredients { get; set; } = new();
+        public List<string> ImageUrls { get; set; } = new();
     }
 
     public class AnalyzeOrchestrator : IRequestHandler<AnalyzeOrchestratorRequest, AnalyzeResponse>
@@ -37,32 +50,52 @@ namespace Glowtics.BLL.Orchestrators
 
         public async Task<AnalyzeResponse> Handle(AnalyzeOrchestratorRequest request, CancellationToken cancellationToken)
         {
-            // 1. Get Retailer by domain
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Domain == request.Domain, cancellationToken)
                 ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Retailer with domain '{request.Domain}' was not found.");
-
-            // 2. Call Langflow service
             var diagnosisResult = await _langflowService.DiagnoseAsync(
                 request.PhotoBytes, 
                 request.FileName, 
+                request.ContentType,
                 retailer.MongoCollectionName, 
                 cancellationToken);
 
-            // 3. Dispatch AddDiagnosticSessionCommand
+            var dbProducts = await _dbContext.Products
+                .Where(p => p.RetailerId == retailer.Id && diagnosisResult.ExternalProductIds.Contains(p.ExternalProductId))
+                .ToListAsync(cancellationToken);
+
+            var validProductIds = dbProducts.Select(p => p.ExternalProductId).ToList();
+
             var command = new AddDiagnosticSessionCommand(
                 retailer.Id,
                 diagnosisResult.SkinProfileResult,
-                diagnosisResult.ExternalProductIds
+                validProductIds
             );
 
             var addSessionResult = await _mediator.Send(command, cancellationToken);
 
-            // 4. Return response
+            var recommendedProducts = new List<RecommendedProductDto>();
+            foreach (var aiRec in diagnosisResult.RoutineItems)
+            {
+                var dbProd = dbProducts.FirstOrDefault(p => p.ExternalProductId == aiRec.ProductId);
+                if (dbProd != null)
+                {
+                    recommendedProducts.Add(new RecommendedProductDto
+                    {
+                        Rationale = aiRec.Rationale,
+                        ExternalProductId = dbProd.ExternalProductId,
+                        Name = dbProd.Name,
+                        IsAvailable = dbProd.IsAvailable,
+                        ActiveIngredients = dbProd.ActiveIngredients,
+                        ImageUrls = dbProd.ImageUrls
+                    });
+                }
+            }
+
             return new AnalyzeResponse
             {
-                SessionId = addSessionResult.SessionId,
-                SkinProfileResult = diagnosisResult.SkinProfileResult
+                Products = recommendedProducts,
+                CartRedirectUrl = retailer.CartRedirectUrl
             };
         }
     }

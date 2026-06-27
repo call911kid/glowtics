@@ -65,7 +65,35 @@ namespace Glowtics.Api
                             .AddValidatorsFromAssembly(typeof(Program).Assembly);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
+            });
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Unable to find the default connection string.");
@@ -104,13 +132,20 @@ namespace Glowtics.Api
             builder.Services.Configure<ApiKeySettings>(builder.Configuration.GetSection(ApiKeySettings.SectionName));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.Configure<LangflowSettings>(builder.Configuration.GetSection(LangflowSettings.SectionName));
+            builder.Services.Configure<LangflowEmbeddingSettings>(builder.Configuration.GetSection(LangflowEmbeddingSettings.SectionName));
 
             builder.Services.AddHttpClient<ILangflowService, LangflowService>((provider, client) => 
             {
                 var settings = provider.GetRequiredService<IOptions<LangflowSettings>>().Value;
                 client.BaseAddress = new Uri(settings.BaseUrl);
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {settings.ApiKey}");
+                client.DefaultRequestHeaders.Add("x-api-key", settings.ApiKey);
                 client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+
+                if (!string.IsNullOrWhiteSpace(settings.NgrokUser) && !string.IsNullOrWhiteSpace(settings.NgrokPass))
+                {
+                    var authBytes = System.Text.Encoding.ASCII.GetBytes($"{settings.NgrokUser}:{settings.NgrokPass}");
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+                }
             });
 
             // Register AutoMapper
@@ -137,6 +172,25 @@ namespace Glowtics.Api
                     ValidAudience = jwtSettings?.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key ?? string.Empty))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(ApiResponse.Failure("ERR_UNAUTHORIZED", "Authentication failed. Token is missing, invalid, or expired.", new List<string>()));
+                        return context.Response.WriteAsync(result);
+                    },
+                    OnForbidden = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(ApiResponse.Failure("ERR_FORBIDDEN", "You do not have the required permissions or role to access this resource.", new List<string>()));
+                        return context.Response.WriteAsync(result);
+                    }
+                };
             })
             .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("ApiKey", null);
 
@@ -152,6 +206,8 @@ namespace Glowtics.Api
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
             app.UseAuthorization();
