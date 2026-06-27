@@ -21,6 +21,17 @@ namespace Glowtics.DAL.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            // Seed Roles
+            builder.Entity<IdentityRole<Guid>>().HasData(
+                new IdentityRole<Guid>
+                {
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Name = "Retailer",
+                    NormalizedName = "RETAILER"
+                }
+            );
+
             builder.ApplyConfigurationsFromAssembly(typeof(GlowticsDbContext).Assembly);
         }
 
