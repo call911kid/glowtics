@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Glowtics.DAL\Glowtics.DAL.csproj" />
-    <ProjectReference Include="..\Glowtics.Shared\Glowtics.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

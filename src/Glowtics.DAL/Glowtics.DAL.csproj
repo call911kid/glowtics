@@ -13,8 +13,4 @@
     <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Glowtics.Shared\Glowtics.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

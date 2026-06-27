@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glowtics.DAL", "Glowtics.DA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glowtics.BLL", "Glowtics.BLL\Glowtics.BLL.csproj", "{585928CE-DD8F-48E2-96C8-045EA492C497}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glowtics.Shared", "Glowtics.Shared\Glowtics.Shared.csproj", "{0E108533-507C-4FD7-98DD-CEF5F494230F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
