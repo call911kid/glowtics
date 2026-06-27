@@ -38,7 +38,7 @@ namespace Glowtics.Api.Controllers
             await request.Photo.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            var command = new AnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Domain);
+            var command = new AnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Photo.ContentType, request.Domain);
             
             var result = await _mediator.Send(command);
 
