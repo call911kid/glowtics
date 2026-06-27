@@ -21,3 +21,10 @@ appsettings.json
 appsettings.Development.json
 appsettings.Local.json
 appsettings.*.json
+
+# Logs
+logs/
+
+# Publish Profiles
+*.pubxml
+*.pubxml.user
