@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -48,12 +49,14 @@ namespace Glowtics.Api.Middlewares
 
         private static string GetErrorCode(Exception exception) => exception switch
         {
+            ValidationException => "VALIDATION_ERROR",
             GlowticsException glowticsException => glowticsException.ErrorCode,
             _ => "ERR_INTERNAL_SERVER_ERROR"
         };
 
         private static HttpStatusCode GetStatusCode(Exception exception) => exception switch
         {
+            ValidationException => HttpStatusCode.BadRequest,
             InvalidCredentialsException => HttpStatusCode.Unauthorized,
             EntityNotFoundException => HttpStatusCode.NotFound,
             BusinessRuleViolationException => HttpStatusCode.BadRequest,
@@ -64,12 +67,14 @@ namespace Glowtics.Api.Middlewares
 
         private static string GetMessage(Exception exception) => exception switch
         {
+            ValidationException => "One or more fields failed validation.",
             GlowticsException glowticsException => glowticsException.Message,
             _ => "An unexpected error occurred."
         };
 
         private static IEnumerable<string> GetErrors(Exception exception) => exception switch
         {
+            ValidationException validationException => validationException.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}"),
             GlowticsException glowticsException => glowticsException.Errors,
             _ => Array.Empty<string>()
         };

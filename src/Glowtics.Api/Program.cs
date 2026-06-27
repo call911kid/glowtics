@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Glowtics.BLL;
 using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Services;
