@@ -14,6 +14,9 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Text;
 using Glowtics.Api.Authentication;
+using Glowtics.Api.Responses;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Glowtics.Api
 {
@@ -22,6 +25,12 @@ namespace Glowtics.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+                             .WriteTo.Console()
+                             .WriteTo.File("logs/glowtics-.txt", rollingInterval: RollingInterval.Day)
+            );
 
             // Add services to the container.
 

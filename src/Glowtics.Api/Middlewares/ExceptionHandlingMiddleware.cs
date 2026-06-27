@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Glowtics.Api.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -25,6 +29,7 @@ namespace Glowtics.Api.Middlewares
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An unhandled exception occurred while processing the request.");
                 await HandleExceptionAsync(context, ex);
             }
         }
