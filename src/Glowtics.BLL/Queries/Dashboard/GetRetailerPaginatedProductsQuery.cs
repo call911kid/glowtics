@@ -13,7 +13,16 @@ namespace Glowtics.BLL.Queries.Dashboard
 {
     public record GetRetailerPaginatedProductsQuery(Guid UserId, int PageNumber = 1, int PageSize = 10) : IRequest<GetRetailerPaginatedProductsResponse>;
 
-    public record ProductDto(Guid Id, string Name, bool IsAvailable);
+    public record ProductDto(
+        Guid Id, 
+        string ExternalProductId, 
+        string Name, 
+        bool IsAvailable,
+        List<string> TargetConditions,
+        List<string> ActiveIngredients,
+        List<string> Conflicts,
+        List<string> ImageUrls
+    );
 
     public record GetRetailerPaginatedProductsResponse(List<ProductDto> Products, int TotalCount, int PageNumber, int PageSize);
 
@@ -49,8 +58,13 @@ namespace Glowtics.BLL.Queries.Dashboard
                 .Take(request.PageSize)
                 .Select(p => new ProductDto(
                     p.Id,
+                    p.ExternalProductId,
                     p.Name,
-                    p.IsAvailable
+                    p.IsAvailable,
+                    p.TargetConditions,
+                    p.ActiveIngredients,
+                    p.Conflicts,
+                    p.ImageUrls
                 ))
                 .ToListAsync(cancellationToken);
 
