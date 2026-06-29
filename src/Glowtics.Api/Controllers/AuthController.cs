@@ -74,6 +74,16 @@ namespace Glowtics.Api.Controllers
             return Ok(ApiResponse.Success("Your email has been successfully confirmed. You may now log in."));
         }
 
+        [HttpPost("resend-confirmation-email")]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequestDto request)
+        {
+            var command = new ResendConfirmationEmailCommand(request.Email);
+            await _mediator.Send(command);
+
+            // Always return success to prevent email enumeration
+            return Ok(ApiResponse.Success("If that email address is in our system and unconfirmed, we have sent a new confirmation code."));
+        }
+
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
         {
@@ -104,5 +114,6 @@ namespace Glowtics.Api.Controllers
 
             return Ok(ApiResponse.Success());
         }
+        
     }
 }
