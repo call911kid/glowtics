@@ -14,6 +14,6 @@ namespace Glowtics.BLL.Interfaces
         /// <summary>
         /// Sends a photo and domain to Langflow for diagnosis, returning the skin profile and product IDs.
         /// </summary>
-        Task<LangflowDiagnosisResult> DiagnoseAsync(byte[] photoBytes, string fileName, string collectionName, CancellationToken cancellationToken = default);
+        Task<LangflowDiagnosisResult> DiagnoseAsync(byte[] photoBytes, string fileName, string contentType, string collectionName, CancellationToken cancellationToken = default);
     }
 }
