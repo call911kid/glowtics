@@ -133,6 +133,9 @@ namespace Glowtics.Api
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.Configure<LangflowSettings>(builder.Configuration.GetSection(LangflowSettings.SectionName));
             builder.Services.Configure<LangflowEmbeddingSettings>(builder.Configuration.GetSection(LangflowEmbeddingSettings.SectionName));
+            builder.Services.Configure<AdvancedLangflowSettings>(builder.Configuration.GetSection(AdvancedLangflowSettings.SectionName));
+            builder.Services.Configure<LangfuseSettings>(builder.Configuration.GetSection(LangfuseSettings.SectionName));
+            builder.Services.AddHttpClient<IAnalysisTracer, AnalysisTracer>();
 
             builder.Services.AddHttpClient<ILangflowService, LangflowService>((provider, client) => 
             {
@@ -146,6 +149,14 @@ namespace Glowtics.Api
                     var authBytes = System.Text.Encoding.ASCII.GetBytes($"{settings.NgrokUser}:{settings.NgrokPass}");
                     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
                 }
+            });
+
+            builder.Services.AddHttpClient<IAdvancedLangflowService, AdvancedLangflowService>((provider, client) => 
+            {
+                var settings = provider.GetRequiredService<IOptions<AdvancedLangflowSettings>>().Value;
+                client.BaseAddress = new Uri(settings.BaseUrl);
+                client.DefaultRequestHeaders.Add("x-api-key", settings.ApiKey);
+                client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
             });
 
             // Register AutoMapper
@@ -199,11 +210,8 @@ namespace Glowtics.Api
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
             

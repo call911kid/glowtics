@@ -14,6 +14,10 @@ namespace Glowtics.DAL.Entities
 
         public string SkinProfileResult { get; set; }
 
+        public string? ExternalUserId { get; set; }
+
+        public string? Feedback { get; set; }
+
         public ICollection<Product> RecommendedProducts { get; set; }
 
         public DateTime CreatedAt { get; set; }

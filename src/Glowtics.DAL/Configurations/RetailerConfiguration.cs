@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +37,7 @@ namespace Glowtics.DAL.Configurations
             builder.Property(r => r.ApiKeyHint)
                 .HasMaxLength(16);
 
-            builder.Property(r => r.ProductEndpoint)
+            builder.Property(r => r.BrandLogoUrl)
                 .HasMaxLength(2048);
 
             builder.Property(r => r.CartRedirectUrl)

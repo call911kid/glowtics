@@ -9,6 +9,7 @@ namespace Glowtics.Api.DTOs.Requests
     {
         public IFormFile Photo { get; set; } = null!;
         public string Domain { get; set; } = string.Empty;
+        public string? ExternalUserId { get; set; }
     }
 
     public class AnalyzeRequestDtoValidator : AbstractValidator<AnalyzeRequestDto>

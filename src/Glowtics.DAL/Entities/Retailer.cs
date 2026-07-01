@@ -21,7 +21,7 @@ namespace Glowtics.DAL.Entities
 
         public string? ApiKeyHint { get; set; }
 
-        public string? ProductEndpoint { get; set; }
+        public string? BrandLogoUrl { get; set; }
 
         public string? CartRedirectUrl { get; set; }
 

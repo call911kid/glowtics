@@ -20,6 +20,8 @@ namespace Glowtics.BLL.Constants
         public const string PasswordChangeFailed = "ERR_PASSWORD_CHANGE_FAILED";
         public const string UserCreationFailed = "ERR_USER_CREATION_FAILED";
         public const string RoleAlreadyExists = "ERR_ROLE_ALREADY_EXISTS";
+        public const string ValidationFailed = "ERR_VALIDATION_FAILED";
+        public const string DiagnosisFailed = "ERR_DIAGNOSIS_FAILED";
         public const string RoleCreationFailed = "ERR_ROLE_CREATION_FAILED";
         public const string RoleAssignmentFailed = "ERR_ROLE_ASSIGNMENT_FAILED";
 

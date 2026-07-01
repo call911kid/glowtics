@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Glowtics.BLL.Orchestrators
 {
-    public record AnalyzeOrchestratorRequest(byte[] PhotoBytes, string FileName, string ContentType, string Domain) : IRequest<AnalyzeResponse>;
+    public record AnalyzeOrchestratorRequest(byte[] PhotoBytes, string FileName, string ContentType, string Domain, string? ExternalUserId) : IRequest<AnalyzeResponse>;
 
     public class AnalyzeResponse
     {
@@ -69,7 +69,8 @@ namespace Glowtics.BLL.Orchestrators
             var command = new AddDiagnosticSessionCommand(
                 retailer.Id,
                 diagnosisResult.SkinProfileResult,
-                validProductIds
+                validProductIds,
+                request.ExternalUserId
             );
 
             var addSessionResult = await _mediator.Send(command, cancellationToken);

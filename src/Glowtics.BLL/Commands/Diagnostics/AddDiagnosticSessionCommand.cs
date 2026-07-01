@@ -15,7 +15,8 @@ namespace Glowtics.BLL.Commands.Diagnostics
     public record AddDiagnosticSessionCommand(
         Guid RetailerId,
         string SkinProfileResult,
-        List<string> ExternalProductIds
+        List<string> ExternalProductIds,
+        string? ExternalUserId
     ) : IRequest<AddDiagnosticSessionResponse>;
 
     public class AddDiagnosticSessionResponse
@@ -49,6 +50,7 @@ namespace Glowtics.BLL.Commands.Diagnostics
             {
                 RetailerId = retailer.Id,
                 SkinProfileResult = request.SkinProfileResult,
+                ExternalUserId = request.ExternalUserId,
                 RecommendedProducts = new List<Product>(),
                 CreatedAt = DateTime.UtcNow
             };

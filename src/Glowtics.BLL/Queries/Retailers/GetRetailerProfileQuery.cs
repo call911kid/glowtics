@@ -16,9 +16,8 @@ namespace Glowtics.BLL.Queries.Retailers
         public Guid RetailerId { get; set; }
         public string Domain { get; set; } = null!;
         public string Status { get; set; } = null!;
-        public string? ProductEndpoint { get; set; }
+        public string? BrandLogoUrl { get; set; }
         public string? CartRedirectUrl { get; set; }
-        public string MongoCollectionName { get; set; } = null!;
         public string? ApiKeyHint { get; set; }
         public DateTime CreatedAt { get; set; }
     }
@@ -43,9 +42,8 @@ namespace Glowtics.BLL.Queries.Retailers
                 RetailerId = retailer.Id,
                 Domain = retailer.Domain,
                 Status = retailer.Status.ToString(),
-                ProductEndpoint = retailer.ProductEndpoint,
+                BrandLogoUrl = retailer.BrandLogoUrl,
                 CartRedirectUrl = retailer.CartRedirectUrl,
-                MongoCollectionName = retailer.MongoCollectionName,
                 ApiKeyHint = retailer.ApiKeyHint,
                 CreatedAt = retailer.CreatedAt
             };

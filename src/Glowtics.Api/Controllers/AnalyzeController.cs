@@ -3,10 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Glowtics.Api.DTOs.Requests;
 using Glowtics.Api.Responses;
+using Glowtics.BLL.Commands.Sessions;
 using Glowtics.BLL.Orchestrators;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
 
 namespace Glowtics.Api.Controllers
 {
@@ -38,11 +42,22 @@ namespace Glowtics.Api.Controllers
             await request.Photo.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            var command = new AnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Photo.ContentType, request.Domain);
+            var command = new AdvancedAnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Photo.ContentType, request.Domain, request.ExternalUserId);
             
             var result = await _mediator.Send(command);
 
             return Ok(ApiResponse.Success(result));
+        }
+
+        [HttpPost("feedback")]
+        [Authorize(AuthenticationSchemes = "ApiKey")]
+        public async Task<IActionResult> AddFeedback([FromBody] AddFeedbackRequestDto request)
+        {
+            var retailerId = Guid.Parse(User.FindFirstValue("RetailerId")!);
+            var command = new AddFeedbackCommand(retailerId, request.ExternalUserId, request.Feedback);
+            await _mediator.Send(command);
+
+            return Ok(ApiResponse.Success("Feedback submitted successfully."));
         }
     }
 }
