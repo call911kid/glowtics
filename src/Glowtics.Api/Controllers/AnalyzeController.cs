@@ -79,5 +79,22 @@ namespace Glowtics.Api.Controllers
             await _mediator.Send(new AddSessionFeedbackCommand(request.SessionId, request.Feedback));
             return Ok(ApiResponse.Success("Feedback submitted successfully."));
         }
+
+        /// <summary>Get paginated diagnostic sessions for a specific external user id.</summary>
+        [HttpGet("sessions")]
+        [Authorize(AuthenticationSchemes = "ApiKey")]
+        public async Task<IActionResult> GetSessions([FromQuery] string externalUserId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(externalUserId))
+            {
+                return BadRequest(ApiResponse.Failure("ERR_VALIDATION", "Validation failed", new List<string> { "externalUserId is required." }));
+            }
+
+            var retailerId = Guid.Parse(User.FindFirstValue("RetailerId")!);
+            var query = new Glowtics.BLL.Queries.Sessions.GetSessionsByExternalUserIdQuery(retailerId, externalUserId, pageNumber, pageSize);
+            var result = await _mediator.Send(query);
+
+            return Ok(ApiResponse.Success(result));
+        }
     }
 }
