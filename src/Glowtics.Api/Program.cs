@@ -131,32 +131,29 @@ namespace Glowtics.Api
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
             builder.Services.Configure<ApiKeySettings>(builder.Configuration.GetSection(ApiKeySettings.SectionName));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-            builder.Services.Configure<LangflowSettings>(builder.Configuration.GetSection(LangflowSettings.SectionName));
-            builder.Services.Configure<LangflowEmbeddingSettings>(builder.Configuration.GetSection(LangflowEmbeddingSettings.SectionName));
             builder.Services.Configure<AdvancedLangflowSettings>(builder.Configuration.GetSection(AdvancedLangflowSettings.SectionName));
             builder.Services.Configure<LangfuseSettings>(builder.Configuration.GetSection(LangfuseSettings.SectionName));
+            builder.Services.Configure<CohereSettings>(builder.Configuration.GetSection(CohereSettings.SectionName));
             builder.Services.AddHttpClient<IAnalysisTracer, AnalysisTracer>();
 
-            builder.Services.AddHttpClient<ILangflowService, LangflowService>((provider, client) => 
-            {
-                var settings = provider.GetRequiredService<IOptions<LangflowSettings>>().Value;
-                client.BaseAddress = new Uri(settings.BaseUrl);
-                client.DefaultRequestHeaders.Add("x-api-key", settings.ApiKey);
-                client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+            // Backend-side product embedding (Cohere) — replaces the HF-MiniLM Langflow embedding workflow.
+            builder.Services.AddHttpClient<IEmbeddingService, CohereEmbeddingService>(c => c.Timeout = TimeSpan.FromSeconds(30));
 
-                if (!string.IsNullOrWhiteSpace(settings.NgrokUser) && !string.IsNullOrWhiteSpace(settings.NgrokPass))
-                {
-                    var authBytes = System.Text.Encoding.ASCII.GetBytes($"{settings.NgrokUser}:{settings.NgrokPass}");
-                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-                }
-            });
-
-            builder.Services.AddHttpClient<IAdvancedLangflowService, AdvancedLangflowService>((provider, client) => 
+            builder.Services.AddHttpClient<IAdvancedLangflowService, AdvancedLangflowService>((provider, client) =>
             {
                 var settings = provider.GetRequiredService<IOptions<AdvancedLangflowSettings>>().Value;
                 client.BaseAddress = new Uri(settings.BaseUrl);
                 client.DefaultRequestHeaders.Add("x-api-key", settings.ApiKey);
                 client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+
+                // ngrok tunnel is protected by HTTP Basic auth; send it when configured (else 401 from ngrok).
+                if (!string.IsNullOrEmpty(settings.BasicAuthUsername))
+                {
+                    var basic = Convert.ToBase64String(
+                        System.Text.Encoding.UTF8.GetBytes($"{settings.BasicAuthUsername}:{settings.BasicAuthPassword}"));
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", basic);
+                }
             });
 
             // Register AutoMapper
@@ -214,7 +211,7 @@ namespace Glowtics.Api
             app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
-            
+
             app.UseCors("AllowAll");
 
             app.UseAuthentication();

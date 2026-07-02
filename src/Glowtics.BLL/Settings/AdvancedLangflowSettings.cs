@@ -6,8 +6,13 @@ namespace Glowtics.BLL.Settings
 
         public string BaseUrl { get; set; } = string.Empty;
         public string ApiKey { get; set; } = string.Empty;
+        // ngrok tunnel HTTP Basic auth (ngrok http 7860 --basic-auth "user:pass"). Optional; sent only when set.
+        public string BasicAuthUsername { get; set; } = string.Empty;
+        public string BasicAuthPassword { get; set; } = string.Empty;
         public string ValidationFlowId { get; set; } = string.Empty;
         public string AnalysisFlowId { get; set; } = string.Empty;
+        // 3rd flow: skin profile text -> RAG + rerank -> product routine (GLOWTICS Build Routine.json).
+        public string BuildRoutineFlowId { get; set; } = string.Empty;
         public string? AgentFlowId { get; set; }
     }
 }

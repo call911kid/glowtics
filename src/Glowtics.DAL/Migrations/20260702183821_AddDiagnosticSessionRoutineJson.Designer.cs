@@ -4,6 +4,7 @@ using Glowtics.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glowtics.DAL.Migrations
 {
     [DbContext(typeof(GlowticsDbContext))]
-    partial class GlowticsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260702183821_AddDiagnosticSessionRoutineJson")]
+    partial class AddDiagnosticSessionRoutineJson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

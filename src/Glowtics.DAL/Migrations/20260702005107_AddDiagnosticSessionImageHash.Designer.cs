@@ -4,6 +4,7 @@ using Glowtics.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glowtics.DAL.Migrations
 {
     [DbContext(typeof(GlowticsDbContext))]
-    partial class GlowticsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260702005107_AddDiagnosticSessionImageHash")]
+    partial class AddDiagnosticSessionImageHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,12 +61,6 @@ namespace Glowtics.DAL.Migrations
 
                     b.Property<Guid>("RetailerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RoutineJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SkinProfileJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SkinProfileResult")
                         .IsRequired()
@@ -285,7 +282,7 @@ namespace Glowtics.DAL.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            ConcurrencyStamp = "bde4ddad-0bb3-46b4-b51d-cf2bd85cf069",
+                            ConcurrencyStamp = "862cc04a-062a-4866-927f-401f75445b3d",
                             Name = "Retailer",
                             NormalizedName = "RETAILER"
                         });

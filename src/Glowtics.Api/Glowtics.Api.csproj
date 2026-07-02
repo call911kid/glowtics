@@ -24,4 +24,9 @@
     <ProjectReference Include="..\Glowtics.DAL\Glowtics.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="seed-products.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

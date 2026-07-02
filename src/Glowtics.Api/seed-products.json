@@ -1,0 +1,1144 @@
+{
+  "database": "Glowtics",
+  "collection": "Product",
+  "count": 50,
+  "products": [
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d4",
+      "text": "Product SKU-2001: CeraVe Hydrating Facial Cleanser. Category: Cleanser. Targets: Dryness, Barrier Repair, Sensitivity. Active ingredients: Ceramides, Hyaluronic Acid, Glycerin. Conflicts: None.",
+      "productId": "SKU-2001",
+      "name": "CeraVe Hydrating Facial Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Dryness",
+        "Barrier Repair",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Hyaluronic Acid",
+        "Glycerin"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d5",
+      "text": "Product SKU-2002: CeraVe Foaming Facial Cleanser. Category: Cleanser. Targets: Oily Skin, Sebum Regulation, Clogged Pores. Active ingredients: Ceramides, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2002",
+      "name": "CeraVe Foaming Facial Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Oily Skin",
+        "Sebum Regulation",
+        "Clogged Pores"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d6",
+      "text": "Product SKU-2003: La Roche-Posay Toleriane Caring Wash. Category: Cleanser. Targets: Sensitivity, Redness, Barrier Repair. Active ingredients: Glycerin, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2003",
+      "name": "La Roche-Posay Toleriane Caring Wash",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Sensitivity",
+        "Redness",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Glycerin",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d7",
+      "text": "Product SKU-2004: CosRx Low pH Good Morning Gel Cleanser. Category: Cleanser. Targets: Oily Skin, Acne, Sensitivity. Active ingredients: BHA, Tea Tree Oil. Conflicts: None.",
+      "productId": "SKU-2004",
+      "name": "CosRx Low pH Good Morning Gel Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Oily Skin",
+        "Acne",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "BHA",
+        "Tea Tree Oil"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d8",
+      "text": "Product SKU-2005: Neutrogena Ultra Gentle Hydrating Cleanser. Category: Cleanser. Targets: Sensitivity, Dryness. Active ingredients: Glycerin. Conflicts: None.",
+      "productId": "SKU-2005",
+      "name": "Neutrogena Ultra Gentle Hydrating Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Sensitivity",
+        "Dryness"
+      ],
+      "activeIngredients": [
+        "Glycerin"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1d9",
+      "text": "Product SKU-2010: The Ordinary Niacinamide 10% + Zinc 1%. Category: Serum. Targets: Hyperpigmentation, Sebum Regulation, Blemishes, Large Pores. Active ingredients: Niacinamide, Zinc PCA. Conflicts: Vitamin C, Direct Acids.",
+      "productId": "SKU-2010",
+      "name": "The Ordinary Niacinamide 10% + Zinc 1%",
+      "category": "Serum",
+      "targetConditions": [
+        "Hyperpigmentation",
+        "Sebum Regulation",
+        "Blemishes",
+        "Large Pores"
+      ],
+      "activeIngredients": [
+        "Niacinamide",
+        "Zinc PCA"
+      ],
+      "conflicts": [
+        "Vitamin C",
+        "Direct Acids"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1da",
+      "text": "Product SKU-2011: The Ordinary Salicylic Acid 2% Solution. Category: Serum. Targets: Acne, Blackheads, Clogged Pores. Active ingredients: Salicylic Acid. Conflicts: Retinol, Direct Acids.",
+      "productId": "SKU-2011",
+      "name": "The Ordinary Salicylic Acid 2% Solution",
+      "category": "Serum",
+      "targetConditions": [
+        "Acne",
+        "Blackheads",
+        "Clogged Pores"
+      ],
+      "activeIngredients": [
+        "Salicylic Acid"
+      ],
+      "conflicts": [
+        "Retinol",
+        "Direct Acids"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1db",
+      "text": "Product SKU-2012: The Ordinary Hyaluronic Acid 2% + B5. Category: Serum. Targets: Dryness, Dullness, Barrier Repair. Active ingredients: Hyaluronic Acid, Panthenol. Conflicts: None.",
+      "productId": "SKU-2012",
+      "name": "The Ordinary Hyaluronic Acid 2% + B5",
+      "category": "Serum",
+      "targetConditions": [
+        "Dryness",
+        "Dullness",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Hyaluronic Acid",
+        "Panthenol"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1dc",
+      "text": "Product SKU-2013: The Ordinary Azelaic Acid 10% Suspension. Category: Treatment. Targets: Redness, Rosacea, Hyperpigmentation, Acne. Active ingredients: Azelaic Acid. Conflicts: None.",
+      "productId": "SKU-2013",
+      "name": "The Ordinary Azelaic Acid 10% Suspension",
+      "category": "Treatment",
+      "targetConditions": [
+        "Redness",
+        "Rosacea",
+        "Hyperpigmentation",
+        "Acne"
+      ],
+      "activeIngredients": [
+        "Azelaic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1dd",
+      "text": "Product SKU-2014: Paula's Choice 2% BHA Liquid Exfoliant. Category: Exfoliant. Targets: Blackheads, Clogged Pores, Large Pores, Acne. Active ingredients: Salicylic Acid. Conflicts: Retinol, Vitamin C.",
+      "productId": "SKU-2014",
+      "name": "Paula's Choice 2% BHA Liquid Exfoliant",
+      "category": "Exfoliant",
+      "targetConditions": [
+        "Blackheads",
+        "Clogged Pores",
+        "Large Pores",
+        "Acne"
+      ],
+      "activeIngredients": [
+        "Salicylic Acid"
+      ],
+      "conflicts": [
+        "Retinol",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1de",
+      "text": "Product SKU-2015: The Ordinary Granactive Retinoid 2% Emulsion. Category: Treatment. Targets: Wrinkles, Fine Lines, Aging, Acne. Active ingredients: Retinoid. Conflicts: AHA, BHA, Vitamin C.",
+      "productId": "SKU-2015",
+      "name": "The Ordinary Granactive Retinoid 2% Emulsion",
+      "category": "Treatment",
+      "targetConditions": [
+        "Wrinkles",
+        "Fine Lines",
+        "Aging",
+        "Acne"
+      ],
+      "activeIngredients": [
+        "Retinoid"
+      ],
+      "conflicts": [
+        "AHA",
+        "BHA",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1df",
+      "text": "Product SKU-2016: La Roche-Posay Pure Vitamin C10 Serum. Category: Serum. Targets: Dullness, Hyperpigmentation, Aging. Active ingredients: Vitamin C, Salicylic Acid. Conflicts: Niacinamide, Retinol.",
+      "productId": "SKU-2016",
+      "name": "La Roche-Posay Pure Vitamin C10 Serum",
+      "category": "Serum",
+      "targetConditions": [
+        "Dullness",
+        "Hyperpigmentation",
+        "Aging"
+      ],
+      "activeIngredients": [
+        "Vitamin C",
+        "Salicylic Acid"
+      ],
+      "conflicts": [
+        "Niacinamide",
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e0",
+      "text": "Product SKU-2017: The Ordinary Alpha Arbutin 2% + HA. Category: Serum. Targets: Hyperpigmentation, Dark Spots, Dullness. Active ingredients: Alpha Arbutin, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2017",
+      "name": "The Ordinary Alpha Arbutin 2% + HA",
+      "category": "Serum",
+      "targetConditions": [
+        "Hyperpigmentation",
+        "Dark Spots",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Alpha Arbutin",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e1",
+      "text": "Product SKU-2018: Some By Mi AHA BHA PHA Miracle Serum. Category: Serum. Targets: Acne, Blackheads, Dullness. Active ingredients: AHA, BHA, PHA, Niacinamide. Conflicts: Retinol.",
+      "productId": "SKU-2018",
+      "name": "Some By Mi AHA BHA PHA Miracle Serum",
+      "category": "Serum",
+      "targetConditions": [
+        "Acne",
+        "Blackheads",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "AHA",
+        "BHA",
+        "PHA",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e2",
+      "text": "Product SKU-2019: The Ordinary Lactic Acid 10% + HA. Category: Exfoliant. Targets: Dullness, Texture, Hyperpigmentation. Active ingredients: Lactic Acid, Hyaluronic Acid. Conflicts: Retinol, Vitamin C.",
+      "productId": "SKU-2019",
+      "name": "The Ordinary Lactic Acid 10% + HA",
+      "category": "Exfoliant",
+      "targetConditions": [
+        "Dullness",
+        "Texture",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Lactic Acid",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "Retinol",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e3",
+      "text": "Product SKU-2020: Paula's Choice 10% Niacinamide Booster. Category: Serum. Targets: Large Pores, Sebum Regulation, Hyperpigmentation. Active ingredients: Niacinamide. Conflicts: Direct Acids.",
+      "productId": "SKU-2020",
+      "name": "Paula's Choice 10% Niacinamide Booster",
+      "category": "Serum",
+      "targetConditions": [
+        "Large Pores",
+        "Sebum Regulation",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "Direct Acids"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e4",
+      "text": "Product SKU-2030: CeraVe Moisturizing Cream. Category: Moisturizer. Targets: Dryness, Barrier Repair, Sensitivity. Active ingredients: Ceramides, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2030",
+      "name": "CeraVe Moisturizing Cream",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Dryness",
+        "Barrier Repair",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e5",
+      "text": "Product SKU-2031: CeraVe PM Facial Moisturizing Lotion. Category: Moisturizer. Targets: Oily Skin, Barrier Repair, Dryness. Active ingredients: Ceramides, Niacinamide, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2031",
+      "name": "CeraVe PM Facial Moisturizing Lotion",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Oily Skin",
+        "Barrier Repair",
+        "Dryness"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Niacinamide",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e6",
+      "text": "Product SKU-2032: La Roche-Posay Toleriane Double Repair. Category: Moisturizer. Targets: Sensitivity, Barrier Repair, Redness. Active ingredients: Ceramides, Niacinamide, Glycerin. Conflicts: None.",
+      "productId": "SKU-2032",
+      "name": "La Roche-Posay Toleriane Double Repair",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Sensitivity",
+        "Barrier Repair",
+        "Redness"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Niacinamide",
+        "Glycerin"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e7",
+      "text": "Product SKU-2033: Neutrogena Hydro Boost Water Gel. Category: Moisturizer. Targets: Dryness, Oily Skin, Dullness. Active ingredients: Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2033",
+      "name": "Neutrogena Hydro Boost Water Gel",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Dryness",
+        "Oily Skin",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e8",
+      "text": "Product SKU-2034: First Aid Beauty Ultra Repair Cream. Category: Moisturizer. Targets: Dryness, Sensitivity, Barrier Repair. Active ingredients: Colloidal Oatmeal, Shea Butter. Conflicts: None.",
+      "productId": "SKU-2034",
+      "name": "First Aid Beauty Ultra Repair Cream",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Dryness",
+        "Sensitivity",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Colloidal Oatmeal",
+        "Shea Butter"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1e9",
+      "text": "Product SKU-2035: Belif The True Cream Aqua Bomb. Category: Moisturizer. Targets: Oily Skin, Dryness, Dullness. Active ingredients: Glycerin, Lady's Mantle. Conflicts: None.",
+      "productId": "SKU-2035",
+      "name": "Belif The True Cream Aqua Bomb",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Oily Skin",
+        "Dryness",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Glycerin",
+        "Lady's Mantle"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1ea",
+      "text": "Product SKU-2040: La Roche-Posay Anthelios SPF 50. Category: Sunscreen. Targets: Sun Protection, Aging, Hyperpigmentation. Active ingredients: Avobenzone, Homosalate. Conflicts: None.",
+      "productId": "SKU-2040",
+      "name": "La Roche-Posay Anthelios SPF 50",
+      "category": "Sunscreen",
+      "targetConditions": [
+        "Sun Protection",
+        "Aging",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Avobenzone",
+        "Homosalate"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1eb",
+      "text": "Product SKU-2041: Beauty of Joseon Relief Sun SPF 50. Category: Sunscreen. Targets: Sun Protection, Sensitivity, Aging. Active ingredients: Rice Extract, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2041",
+      "name": "Beauty of Joseon Relief Sun SPF 50",
+      "category": "Sunscreen",
+      "targetConditions": [
+        "Sun Protection",
+        "Sensitivity",
+        "Aging"
+      ],
+      "activeIngredients": [
+        "Rice Extract",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1ec",
+      "text": "Product SKU-2042: EltaMD UV Clear SPF 46. Category: Sunscreen. Targets: Sun Protection, Acne, Redness, Sensitivity. Active ingredients: Zinc Oxide, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2042",
+      "name": "EltaMD UV Clear SPF 46",
+      "category": "Sunscreen",
+      "targetConditions": [
+        "Sun Protection",
+        "Acne",
+        "Redness",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Zinc Oxide",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1ed",
+      "text": "Product SKU-2043: Supergoop Unseen Sunscreen SPF 40. Category: Sunscreen. Targets: Sun Protection, Oily Skin, Large Pores. Active ingredients: Avobenzone. Conflicts: None.",
+      "productId": "SKU-2043",
+      "name": "Supergoop Unseen Sunscreen SPF 40",
+      "category": "Sunscreen",
+      "targetConditions": [
+        "Sun Protection",
+        "Oily Skin",
+        "Large Pores"
+      ],
+      "activeIngredients": [
+        "Avobenzone"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1ee",
+      "text": "Product SKU-2050: The Ordinary Caffeine Solution 5% + EGCG. Category: Eye Cream. Targets: Dark Circles, Puffiness. Active ingredients: Caffeine, EGCG. Conflicts: None.",
+      "productId": "SKU-2050",
+      "name": "The Ordinary Caffeine Solution 5% + EGCG",
+      "category": "Eye Cream",
+      "targetConditions": [
+        "Dark Circles",
+        "Puffiness"
+      ],
+      "activeIngredients": [
+        "Caffeine",
+        "EGCG"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1ef",
+      "text": "Product SKU-2051: CeraVe Eye Repair Cream. Category: Eye Cream. Targets: Dark Circles, Dryness, Fine Lines. Active ingredients: Ceramides, Niacinamide, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2051",
+      "name": "CeraVe Eye Repair Cream",
+      "category": "Eye Cream",
+      "targetConditions": [
+        "Dark Circles",
+        "Dryness",
+        "Fine Lines"
+      ],
+      "activeIngredients": [
+        "Ceramides",
+        "Niacinamide",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f0",
+      "text": "Product SKU-2052: La Roche-Posay Pigmentclar Eyes. Category: Eye Cream. Targets: Dark Circles, Puffiness, Hyperpigmentation. Active ingredients: Caffeine, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2052",
+      "name": "La Roche-Posay Pigmentclar Eyes",
+      "category": "Eye Cream",
+      "targetConditions": [
+        "Dark Circles",
+        "Puffiness",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Caffeine",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f1",
+      "text": "Product SKU-2060: Paula's Choice Pore-Reducing Toner. Category: Toner. Targets: Large Pores, Oily Skin, Dullness. Active ingredients: Niacinamide, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2060",
+      "name": "Paula's Choice Pore-Reducing Toner",
+      "category": "Toner",
+      "targetConditions": [
+        "Large Pores",
+        "Oily Skin",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Niacinamide",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f2",
+      "text": "Product SKU-2061: COSRX AHA/BHA Clarifying Toner. Category: Toner. Targets: Acne, Blackheads, Texture. Active ingredients: AHA, BHA. Conflicts: Retinol.",
+      "productId": "SKU-2061",
+      "name": "COSRX AHA/BHA Clarifying Toner",
+      "category": "Toner",
+      "targetConditions": [
+        "Acne",
+        "Blackheads",
+        "Texture"
+      ],
+      "activeIngredients": [
+        "AHA",
+        "BHA"
+      ],
+      "conflicts": [
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f3",
+      "text": "Product SKU-2062: Klairs Supple Preparation Unscented Toner. Category: Toner. Targets: Sensitivity, Dryness, Redness. Active ingredients: Hyaluronic Acid, Centella. Conflicts: None.",
+      "productId": "SKU-2062",
+      "name": "Klairs Supple Preparation Unscented Toner",
+      "category": "Toner",
+      "targetConditions": [
+        "Sensitivity",
+        "Dryness",
+        "Redness"
+      ],
+      "activeIngredients": [
+        "Hyaluronic Acid",
+        "Centella"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f4",
+      "text": "Product SKU-2070: The Ordinary Salicylic Acid 2% Masque. Category: Mask. Targets: Acne, Clogged Pores, Blackheads. Active ingredients: Salicylic Acid, Charcoal. Conflicts: Retinol.",
+      "productId": "SKU-2070",
+      "name": "The Ordinary Salicylic Acid 2% Masque",
+      "category": "Mask",
+      "targetConditions": [
+        "Acne",
+        "Clogged Pores",
+        "Blackheads"
+      ],
+      "activeIngredients": [
+        "Salicylic Acid",
+        "Charcoal"
+      ],
+      "conflicts": [
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f5",
+      "text": "Product SKU-2071: Aztec Secret Indian Healing Clay. Category: Mask. Targets: Oily Skin, Clogged Pores, Large Pores. Active ingredients: Bentonite Clay. Conflicts: None.",
+      "productId": "SKU-2071",
+      "name": "Aztec Secret Indian Healing Clay",
+      "category": "Mask",
+      "targetConditions": [
+        "Oily Skin",
+        "Clogged Pores",
+        "Large Pores"
+      ],
+      "activeIngredients": [
+        "Bentonite Clay"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f6",
+      "text": "Product SKU-2072: Laneige Water Sleeping Mask. Category: Mask. Targets: Dryness, Dullness, Barrier Repair. Active ingredients: Hyaluronic Acid, Squalane. Conflicts: None.",
+      "productId": "SKU-2072",
+      "name": "Laneige Water Sleeping Mask",
+      "category": "Mask",
+      "targetConditions": [
+        "Dryness",
+        "Dullness",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Hyaluronic Acid",
+        "Squalane"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f7",
+      "text": "Product SKU-2080: La Roche-Posay Cicaplast Baume B5. Category: Treatment. Targets: Barrier Repair, Sensitivity, Redness. Active ingredients: Panthenol, Madecassoside. Conflicts: None.",
+      "productId": "SKU-2080",
+      "name": "La Roche-Posay Cicaplast Baume B5",
+      "category": "Treatment",
+      "targetConditions": [
+        "Barrier Repair",
+        "Sensitivity",
+        "Redness"
+      ],
+      "activeIngredients": [
+        "Panthenol",
+        "Madecassoside"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f8",
+      "text": "Product SKU-2081: The Ordinary 100% Plant-Derived Squalane. Category: Oil. Targets: Dryness, Barrier Repair. Active ingredients: Squalane. Conflicts: None.",
+      "productId": "SKU-2081",
+      "name": "The Ordinary 100% Plant-Derived Squalane",
+      "category": "Oil",
+      "targetConditions": [
+        "Dryness",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Squalane"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1f9",
+      "text": "Product SKU-2082: Bioderma Sensibio AR Anti-Redness Cream. Category: Treatment. Targets: Redness, Rosacea, Sensitivity. Active ingredients: Glycerin, Ginkgo Biloba. Conflicts: None.",
+      "productId": "SKU-2082",
+      "name": "Bioderma Sensibio AR Anti-Redness Cream",
+      "category": "Treatment",
+      "targetConditions": [
+        "Redness",
+        "Rosacea",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Glycerin",
+        "Ginkgo Biloba"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1fa",
+      "text": "Product SKU-2083: Differin Adapalene Gel 0.1%. Category: Treatment. Targets: Acne, Blackheads, Clogged Pores. Active ingredients: Adapalene. Conflicts: AHA, BHA, Vitamin C.",
+      "productId": "SKU-2083",
+      "name": "Differin Adapalene Gel 0.1%",
+      "category": "Treatment",
+      "targetConditions": [
+        "Acne",
+        "Blackheads",
+        "Clogged Pores"
+      ],
+      "activeIngredients": [
+        "Adapalene"
+      ],
+      "conflicts": [
+        "AHA",
+        "BHA",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3ae2ad981c5f6d2b64b1fb",
+      "text": "Product SKU-2084: SkinCeuticals C E Ferulic. Category: Serum. Targets: Aging, Wrinkles, Dullness, Hyperpigmentation. Active ingredients: Vitamin C, Vitamin E, Ferulic Acid. Conflicts: Niacinamide, Retinol.",
+      "productId": "SKU-2084",
+      "name": "SkinCeuticals C E Ferulic",
+      "category": "Serum",
+      "targetConditions": [
+        "Aging",
+        "Wrinkles",
+        "Dullness",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Vitamin C",
+        "Vitamin E",
+        "Ferulic Acid"
+      ],
+      "conflicts": [
+        "Niacinamide",
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb737",
+      "text": "Product SKU-2090: The Ordinary Glycolic Acid 7% Toning Solution. Category: Exfoliant. Targets: Dullness, Texture, Hyperpigmentation. Active ingredients: Glycolic Acid. Conflicts: Retinol, Vitamin C.",
+      "productId": "SKU-2090",
+      "name": "The Ordinary Glycolic Acid 7% Toning Solution",
+      "category": "Exfoliant",
+      "targetConditions": [
+        "Dullness",
+        "Texture",
+        "Hyperpigmentation"
+      ],
+      "activeIngredients": [
+        "Glycolic Acid"
+      ],
+      "conflicts": [
+        "Retinol",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb738",
+      "text": "Product SKU-2091: CeraVe SA Smoothing Cleanser. Category: Cleanser. Targets: Texture, Keratosis Pilaris, Clogged Pores. Active ingredients: Salicylic Acid, Ceramides, Niacinamide. Conflicts: None.",
+      "productId": "SKU-2091",
+      "name": "CeraVe SA Smoothing Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Texture",
+        "Keratosis Pilaris",
+        "Clogged Pores"
+      ],
+      "activeIngredients": [
+        "Salicylic Acid",
+        "Ceramides",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb739",
+      "text": "Product SKU-2092: The INKEY List Retinol Serum. Category: Treatment. Targets: Wrinkles, Fine Lines, Aging, Acne. Active ingredients: Retinol. Conflicts: AHA, BHA, Vitamin C.",
+      "productId": "SKU-2092",
+      "name": "The INKEY List Retinol Serum",
+      "category": "Treatment",
+      "targetConditions": [
+        "Wrinkles",
+        "Fine Lines",
+        "Aging",
+        "Acne"
+      ],
+      "activeIngredients": [
+        "Retinol"
+      ],
+      "conflicts": [
+        "AHA",
+        "BHA",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73a",
+      "text": "Product SKU-2093: Drunk Elephant Protini Polypeptide Cream. Category: Moisturizer. Targets: Aging, Barrier Repair, Dullness. Active ingredients: Peptides, Amino Acids. Conflicts: None.",
+      "productId": "SKU-2093",
+      "name": "Drunk Elephant Protini Polypeptide Cream",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Aging",
+        "Barrier Repair",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Peptides",
+        "Amino Acids"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73b",
+      "text": "Product SKU-2094: COSRX Advanced Snail 96 Mucin Power Essence. Category: Essence. Targets: Barrier Repair, Dryness, Dullness. Active ingredients: Snail Mucin, Hyaluronic Acid. Conflicts: None.",
+      "productId": "SKU-2094",
+      "name": "COSRX Advanced Snail 96 Mucin Power Essence",
+      "category": "Essence",
+      "targetConditions": [
+        "Barrier Repair",
+        "Dryness",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Snail Mucin",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73c",
+      "text": "Product SKU-2095: Sunday Riley Good Genes Lactic Acid Treatment. Category: Treatment. Targets: Dullness, Texture, Hyperpigmentation, Fine Lines. Active ingredients: Lactic Acid. Conflicts: Retinol, Vitamin C.",
+      "productId": "SKU-2095",
+      "name": "Sunday Riley Good Genes Lactic Acid Treatment",
+      "category": "Treatment",
+      "targetConditions": [
+        "Dullness",
+        "Texture",
+        "Hyperpigmentation",
+        "Fine Lines"
+      ],
+      "activeIngredients": [
+        "Lactic Acid"
+      ],
+      "conflicts": [
+        "Retinol",
+        "Vitamin C"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73d",
+      "text": "Product SKU-2096: The Ordinary Mandelic Acid 10% + HA. Category: Exfoliant. Targets: Hyperpigmentation, Acne, Texture, Sensitivity. Active ingredients: Mandelic Acid, Hyaluronic Acid. Conflicts: Retinol.",
+      "productId": "SKU-2096",
+      "name": "The Ordinary Mandelic Acid 10% + HA",
+      "category": "Exfoliant",
+      "targetConditions": [
+        "Hyperpigmentation",
+        "Acne",
+        "Texture",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Mandelic Acid",
+        "Hyaluronic Acid"
+      ],
+      "conflicts": [
+        "Retinol"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73e",
+      "text": "Product SKU-2097: Avene Thermal Spring Water Mist. Category: Toner. Targets: Sensitivity, Redness, Barrier Repair. Active ingredients: Thermal Spring Water. Conflicts: None.",
+      "productId": "SKU-2097",
+      "name": "Avene Thermal Spring Water Mist",
+      "category": "Toner",
+      "targetConditions": [
+        "Sensitivity",
+        "Redness",
+        "Barrier Repair"
+      ],
+      "activeIngredients": [
+        "Thermal Spring Water"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb73f",
+      "text": "Product SKU-2098: Kiehl's Midnight Recovery Concentrate Oil. Category: Oil. Targets: Dryness, Aging, Dullness. Active ingredients: Squalane, Evening Primrose Oil. Conflicts: None.",
+      "productId": "SKU-2098",
+      "name": "Kiehl's Midnight Recovery Concentrate Oil",
+      "category": "Oil",
+      "targetConditions": [
+        "Dryness",
+        "Aging",
+        "Dullness"
+      ],
+      "activeIngredients": [
+        "Squalane",
+        "Evening Primrose Oil"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "_id": "6a3aed0063ad9a5c6eccb740",
+      "text": "Product SKU-2099: Paula's Choice C15 Super Booster. Category: Serum. Targets: Dullness, Hyperpigmentation, Aging. Active ingredients: Vitamin C, Vitamin E, Ferulic Acid. Conflicts: Niacinamide, Retinol.",
+      "productId": "SKU-2099",
+      "name": "Paula's Choice C15 Super Booster",
+      "category": "Serum",
+      "targetConditions": [
+        "Dullness",
+        "Hyperpigmentation",
+        "Aging"
+      ],
+      "activeIngredients": [
+        "Vitamin C",
+        "Vitamin E",
+        "Ferulic Acid"
+      ],
+      "conflicts": [
+        "Niacinamide",
+        "Retinol"
+      ]
+    },
+    {
+      "productId": "SKU-2006",
+      "name": "Vanicream Gentle Facial Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Sensitivity",
+        "Barrier Repair",
+        "Dryness"
+      ],
+      "activeIngredients": [
+        "Glycerin",
+        "Sodium Cocoyl Isethionate"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2007",
+      "name": "Youth to the People Superfood Antioxidant Cleanser",
+      "category": "Cleanser",
+      "targetConditions": [
+        "Dullness",
+        "Antioxidant Protection",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Kale Extract",
+        "Green Tea",
+        "Spinach Extract"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2021",
+      "name": "Paula's Choice 10% Azelaic Acid Booster",
+      "category": "Serum",
+      "targetConditions": [
+        "Redness",
+        "Hyperpigmentation",
+        "Blemishes"
+      ],
+      "activeIngredients": [
+        "Azelaic Acid",
+        "Salicylic Acid"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2022",
+      "name": "Good Molecules Discoloration Correcting Serum",
+      "category": "Serum",
+      "targetConditions": [
+        "Hyperpigmentation",
+        "Dark Spots",
+        "Uneven Tone"
+      ],
+      "activeIngredients": [
+        "Tranexamic Acid",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2036",
+      "name": "Neutrogena Hydro Boost Gel-Cream",
+      "category": "Moisturizer",
+      "targetConditions": [
+        "Dryness",
+        "Dehydration",
+        "Sensitivity"
+      ],
+      "activeIngredients": [
+        "Hyaluronic Acid",
+        "Glycerin"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2044",
+      "name": "Biore UV Aqua Rich Watery Essence SPF 50",
+      "category": "Sunscreen",
+      "targetConditions": [
+        "Sun Protection",
+        "Oiliness"
+      ],
+      "activeIngredients": [
+        "Homosalate",
+        "Octinoxate"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2053",
+      "name": "Kiehl's Creamy Eye Treatment with Avocado",
+      "category": "Eye Care",
+      "targetConditions": [
+        "Dryness",
+        "Dark Circles"
+      ],
+      "activeIngredients": [
+        "Avocado Oil",
+        "Shea Butter"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2063",
+      "name": "Thayers Alcohol-Free Witch Hazel Toner",
+      "category": "Toner",
+      "targetConditions": [
+        "Oiliness",
+        "Large Pores",
+        "Redness"
+      ],
+      "activeIngredients": [
+        "Witch Hazel",
+        "Aloe Vera"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2073",
+      "name": "Innisfree Super Volcanic Pore Clay Mask",
+      "category": "Mask",
+      "targetConditions": [
+        "Oiliness",
+        "Blackheads",
+        "Large Pores"
+      ],
+      "activeIngredients": [
+        "Volcanic Clusters",
+        "AHA"
+      ],
+      "conflicts": [
+        "None"
+      ]
+    },
+    {
+      "productId": "SKU-2085",
+      "name": "CeraVe Resurfacing Retinol Serum",
+      "category": "Retinoid",
+      "targetConditions": [
+        "Post-Acne Marks",
+        "Texture",
+        "Blemishes"
+      ],
+      "activeIngredients": [
+        "Retinol",
+        "Ceramides",
+        "Niacinamide"
+      ],
+      "conflicts": [
+        "AHA",
+        "BHA",
+        "Vitamin C"
+      ]
+    }
+  ]
+}

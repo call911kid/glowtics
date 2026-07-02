@@ -42,8 +42,20 @@ namespace Glowtics.Api.Controllers
             await request.Photo.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            var command = new AdvancedAnalyzeOrchestratorRequest(photoBytes, request.Photo.FileName, request.Photo.ContentType, request.Domain, request.ExternalUserId);
-            
+            var command = new AnalyzeImageOrchestratorRequest(photoBytes, request.Photo.FileName, request.Photo.ContentType, request.Domain, request.ExternalUserId);
+
+            var result = await _mediator.Send(command);
+
+            return Ok(ApiResponse.Success(result));
+        }
+
+        /// <summary>Step 2: turn the step-1 skin profile into a product routine (RAG + rerank) and persist the session.</summary>
+        [HttpPost("routine")]
+        public async Task<IActionResult> BuildRoutine([FromBody] BuildRoutineRequestDto request)
+        {
+            var command = new BuildRoutineFromProfileOrchestratorRequest(
+                request.SkinProfile, request.ImageHash, request.Domain, request.ExternalUserId);
+
             var result = await _mediator.Send(command);
 
             return Ok(ApiResponse.Success(result));
@@ -57,6 +69,14 @@ namespace Glowtics.Api.Controllers
             var command = new AddFeedbackCommand(retailerId, request.ExternalUserId, request.Feedback);
             await _mediator.Send(command);
 
+            return Ok(ApiResponse.Success("Feedback submitted successfully."));
+        }
+
+        /// <summary>Anonymous shopper feedback from the results page, tied to a diagnostic session id.</summary>
+        [HttpPost("session-feedback")]
+        public async Task<IActionResult> AddSessionFeedback([FromBody] SessionFeedbackRequestDto request)
+        {
+            await _mediator.Send(new AddSessionFeedbackCommand(request.SessionId, request.Feedback));
             return Ok(ApiResponse.Success("Feedback submitted successfully."));
         }
     }
