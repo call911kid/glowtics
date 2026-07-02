@@ -151,10 +151,6 @@ namespace Glowtics.BLL.Services
                 ? routineItems.Where(i => !string.IsNullOrWhiteSpace(i.ProductId)).Select(i => i.ProductId).Distinct().ToList()
                 : ExtractProductIds(routineText!);
 
-            var productIds = routineItems.Count > 0
-                ? routineItems.Where(i => !string.IsNullOrWhiteSpace(i.ProductId)).Select(i => i.ProductId).Distinct().ToList()
-                : ExtractProductIds(routineText!);
-
             return new LangflowDiagnosisResult
             {
                 IsValidFace = true,

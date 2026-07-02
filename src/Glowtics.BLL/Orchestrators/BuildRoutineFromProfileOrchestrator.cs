@@ -123,18 +123,6 @@ namespace Glowtics.BLL.Orchestrators
                 RoutineJson: diagnosis.SkinProfileResult),      // full routine JSON incl. per-product rationale
                 cancellationToken);
 
-                    recommendedProducts.Add(new RecommendedProductDto
-                    {
-                        Rationale = string.IsNullOrWhiteSpace(rationale) ? "Recommended by AI" : rationale!,
-                        ExternalProductId = dbProd.ExternalProductId,
-                        Name = dbProd.Name,
-                        IsAvailable = dbProd.IsAvailable,
-                        ActiveIngredients = dbProd.ActiveIngredients,
-                        ImageUrls = dbProd.ImageUrls
-                    });
-                }
-            }
-
             return new BuildRoutineFromProfileResponse
             {
                 SessionId = addSessionResult.SessionId,
