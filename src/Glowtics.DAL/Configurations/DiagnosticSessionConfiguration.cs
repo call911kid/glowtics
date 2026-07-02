@@ -24,6 +24,12 @@ namespace Glowtics.DAL.Configurations
             builder.Property(ds => ds.CreatedAt)
                 .IsRequired();
 
+            builder.Property(ds => ds.ImageHash)
+                .HasMaxLength(64);
+
+            // Dedup lookup: same retailer + same user + same image -> return the old session.
+            builder.HasIndex(ds => new { ds.RetailerId, ds.ExternalUserId, ds.ImageHash });
+
             builder.HasOne(ds => ds.Retailer)
                 .WithMany(r => r.DiagnosticSessions)
                 .HasForeignKey(ds => ds.RetailerId)

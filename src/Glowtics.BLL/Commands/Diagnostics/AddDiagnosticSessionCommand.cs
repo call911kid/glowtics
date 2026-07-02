@@ -16,7 +16,8 @@ namespace Glowtics.BLL.Commands.Diagnostics
         Guid RetailerId,
         string SkinProfileResult,
         List<string> ExternalProductIds,
-        string? ExternalUserId
+        string? ExternalUserId,
+        string? ImageHash = null
     ) : IRequest<AddDiagnosticSessionResponse>;
 
     public class AddDiagnosticSessionResponse
@@ -51,6 +52,7 @@ namespace Glowtics.BLL.Commands.Diagnostics
                 RetailerId = retailer.Id,
                 SkinProfileResult = request.SkinProfileResult,
                 ExternalUserId = request.ExternalUserId,
+                ImageHash = request.ImageHash,
                 RecommendedProducts = new List<Product>(),
                 CreatedAt = DateTime.UtcNow
             };

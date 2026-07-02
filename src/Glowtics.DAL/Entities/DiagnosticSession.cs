@@ -16,6 +16,9 @@ namespace Glowtics.DAL.Entities
 
         public string? ExternalUserId { get; set; }
 
+        /// <summary>SHA-256 of the uploaded photo — lets a repeat (same user + same image) return the cached result.</summary>
+        public string? ImageHash { get; set; }
+
         public string? Feedback { get; set; }
 
         public ICollection<Product> RecommendedProducts { get; set; }

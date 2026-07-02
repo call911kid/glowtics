@@ -63,7 +63,7 @@ namespace Glowtics.BLL.Services
             };
         }
 
-        public async Task<LangflowDiagnosisResult> AnalyzeRoutineAsync(
+        public async Task<string> AnalyzeSkinProfileAsync(
             byte[] photoBytes, string fileName, string collectionName, CancellationToken cancellationToken = default)
         {
             var nodes = await GetFlowNodesAsync(_settings.AnalysisFlowId, cancellationToken);
@@ -73,6 +73,7 @@ namespace Glowtics.BLL.Services
             {
                 [nodes.ChatInput] = new { files = new[] { filePath }, input_value = "" }
             };
+            // Harmless if the analysis flow has no Mongo node (skin-only diagnosis).
             if (!string.IsNullOrEmpty(nodes.Mongo))
             {
                 tweaks[nodes.Mongo!] = new { collection_name = collectionName };
@@ -82,17 +83,65 @@ namespace Glowtics.BLL.Services
                 new { output_type = "chat", input_type = "chat", tweaks }, cancellationToken);
             var outputs = CollectOutputs(runJson);
 
+            var profileText = outputs.TryGetValue(nodes.ChatOutput, out var pt) ? pt : outputs.Values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(profileText))
+            {
+                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Langflow analysis returned no skin profile.");
+            }
+            return profileText!;
+        }
+
+        public async Task<LangflowDiagnosisResult> BuildRoutineAsync(
+            string skinProfile, string collectionName, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(_settings.BuildRoutineFlowId))
+            {
+                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
+                    "Build-routine flow is not configured. Set LangflowApiAdvanced:BuildRoutineFlowId after deploying GLOWTICS Build Routine.json.");
+            }
+
+            var nodes = await GetFlowNodesAsync(_settings.BuildRoutineFlowId, cancellationToken);
+
+            // Text-in: the skin profile from the analysis flow feeds the build-routine flow's ChatInput.
+            var tweaks = new Dictionary<string, object>
+            {
+                [nodes.ChatInput] = new { input_value = skinProfile }
+            };
+            if (!string.IsNullOrEmpty(nodes.Mongo))
+            {
+                tweaks[nodes.Mongo!] = new { collection_name = collectionName };
+            }
+
+            var runJson = await RunFlowWithRetryAsync(_settings.BuildRoutineFlowId,
+                new { output_type = "chat", input_type = "chat", tweaks }, cancellationToken);
+            var outputs = CollectOutputs(runJson);
+
             var routineText = outputs.TryGetValue(nodes.ChatOutput, out var rt) ? rt : outputs.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(routineText))
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Langflow analysis returned no routine.");
+                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Langflow build-routine returned no routine.");
             }
+
+            // Parse the routine items so per-product rationale flows to the UI (not a generic label).
+            var routineItems = new List<LangflowRoutineItem>();
+            try
+            {
+                var parsed = JsonSerializer.Deserialize<LangflowRoutineResponse>(
+                    routineText!, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (parsed?.Routine != null) routineItems = parsed.Routine;
+            }
+            catch (JsonException) { /* non-JSON routine — fall back to id extraction only */ }
+
+            var productIds = routineItems.Count > 0
+                ? routineItems.Where(i => !string.IsNullOrWhiteSpace(i.ProductId)).Select(i => i.ProductId).Distinct().ToList()
+                : ExtractProductIds(routineText!);
 
             return new LangflowDiagnosisResult
             {
                 IsValidFace = true,
                 SkinProfileResult = routineText!,
-                ExternalProductIds = ExtractProductIds(routineText!)
+                ExternalProductIds = productIds,
+                RoutineItems = routineItems
             };
         }
 
