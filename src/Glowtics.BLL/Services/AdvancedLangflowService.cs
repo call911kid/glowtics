@@ -22,6 +22,10 @@ namespace Glowtics.BLL.Services
         private const string TransientStructuredOutputError = "No structured output returned";
         private const string DefaultRejectReason = "Image rejected. Please upload a clear, front-facing photo of a single face in good lighting.";
         private const int MaxRunRetries = 2;
+        // The Langflow MongoDBAtlasVector component leaves `quantization` null, which Atlas rejects
+        // ("Invalid quantization cannot be null. Allowed values are: none, scalar, binary."). We override
+        // it to "none" via tweaks — matching the un-quantized index CreateMongoCollectionCommand provisions.
+        private const string MongoQuantization = "none";
 
         private readonly HttpClient _httpClient;
         private readonly AdvancedLangflowSettings _settings;
@@ -76,7 +80,7 @@ namespace Glowtics.BLL.Services
             // Harmless if the analysis flow has no Mongo node (skin-only diagnosis).
             if (!string.IsNullOrEmpty(nodes.Mongo))
             {
-                tweaks[nodes.Mongo!] = new { collection_name = collectionName };
+                tweaks[nodes.Mongo!] = new { collection_name = collectionName, quantization = MongoQuantization };
             }
 
             var runJson = await RunFlowWithRetryAsync(_settings.AnalysisFlowId,
@@ -121,7 +125,7 @@ namespace Glowtics.BLL.Services
             };
             if (!string.IsNullOrEmpty(nodes.Mongo))
             {
-                tweaks[nodes.Mongo!] = new { collection_name = collectionName };
+                tweaks[nodes.Mongo!] = new { collection_name = collectionName, quantization = MongoQuantization };
             }
 
             var runJson = await RunFlowWithRetryAsync(_settings.BuildRoutineFlowId,
@@ -210,7 +214,8 @@ namespace Glowtics.BLL.Services
                 return cached;
             }
 
-            var response = await _httpClient.GetAsync($"flows/{flowId}", cancellationToken);
+            var response = await SendGuardedAsync(
+                () => _httpClient.GetAsync($"flows/{flowId}", cancellationToken), "flow load", cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
@@ -256,7 +261,8 @@ namespace Glowtics.BLL.Services
                 }
             }
 
-            var response = await _httpClient.PostAsync($"files/upload/{flowId}", form, cancellationToken);
+            var response = await SendGuardedAsync(
+                () => _httpClient.PostAsync($"files/upload/{flowId}", form, cancellationToken), "photo upload", cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
@@ -276,7 +282,8 @@ namespace Glowtics.BLL.Services
             string lastError = string.Empty;
             for (var attempt = 0; attempt <= MaxRunRetries; attempt++)
             {
-                var response = await _httpClient.PostAsJsonAsync($"run/{flowId}?stream=false", payload, cancellationToken);
+                var response = await SendGuardedAsync(
+                    () => _httpClient.PostAsJsonAsync($"run/{flowId}?stream=false", payload, cancellationToken), "flow run", cancellationToken);
                 var body = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -293,6 +300,31 @@ namespace Glowtics.BLL.Services
 
             throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
                 $"Langflow flow run failed: {Truncate(lastError, 300)}");
+        }
+
+        /// <summary>Run an HTTP call and translate transport-level failures (Langflow/ngrok tunnel down,
+        /// backend unresponsive) into a clean ExternalServiceException (-> 502) instead of letting a raw
+        /// HttpRequestException / timeout bubble up as an opaque 500. A genuine client-side cancellation
+        /// (caller's token) is left alone so it isn't mistaken for a backend outage.</summary>
+        private async Task<HttpResponseMessage> SendGuardedAsync(
+            Func<Task<HttpResponseMessage>> send, string action, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await send();
+            }
+            catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+            {
+                // HttpClient timeout (not a client disconnect): the backend is too slow / hung.
+                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
+                    $"Langflow did not respond in time during {action}. The AI service may be offline.");
+            }
+            catch (HttpRequestException ex)
+            {
+                // DNS / connection failure: tunnel down or backend unreachable.
+                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
+                    $"Could not reach Langflow during {action}. The AI service may be offline. ({ex.Message})");
+            }
         }
 
         /// <summary>component_id -> output text, across the run response.</summary>

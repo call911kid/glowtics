@@ -143,6 +143,9 @@ namespace Glowtics.Api
             {
                 var settings = provider.GetRequiredService<IOptions<AdvancedLangflowSettings>>().Value;
                 client.BaseAddress = new Uri(settings.BaseUrl);
+                // Bound the wait so an unresponsive/hung Langflow backend fails fast as a clean 502
+                // instead of hanging on the 100s default. Generous enough for real vision+RAG runs; tune if needed.
+                client.Timeout = TimeSpan.FromSeconds(60);
                 client.DefaultRequestHeaders.Add("x-api-key", settings.ApiKey);
                 client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
 

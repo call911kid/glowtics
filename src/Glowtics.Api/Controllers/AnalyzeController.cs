@@ -80,18 +80,19 @@ namespace Glowtics.Api.Controllers
             return Ok(ApiResponse.Success("Feedback submitted successfully."));
         }
 
-        /// <summary>Get paginated diagnostic sessions for a specific external user id.</summary>
+        /// <summary>Shopper session history for a given externalUserId (optionally scoped to one store via ?domain).
+        /// Anonymous — the host app owns the (unguessable) externalUserId; same trust model as session-feedback.</summary>
         [HttpGet("sessions")]
-        [Authorize(AuthenticationSchemes = "ApiKey")]
-        public async Task<IActionResult> GetSessions([FromQuery] string externalUserId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetSessions(
+            [FromQuery] string externalUserId, [FromQuery] string? domain = null,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             if (string.IsNullOrWhiteSpace(externalUserId))
             {
                 return BadRequest(ApiResponse.Failure("ERR_VALIDATION", "Validation failed", new List<string> { "externalUserId is required." }));
             }
 
-            var retailerId = Guid.Parse(User.FindFirstValue("RetailerId")!);
-            var query = new Glowtics.BLL.Queries.Sessions.GetSessionsByExternalUserIdQuery(retailerId, externalUserId, pageNumber, pageSize);
+            var query = new Glowtics.BLL.Queries.Sessions.GetSessionsByExternalUserIdQuery(externalUserId, domain, pageNumber, pageSize);
             var result = await _mediator.Send(query);
 
             return Ok(ApiResponse.Success(result));

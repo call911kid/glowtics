@@ -23,7 +23,7 @@ namespace Glowtics.BLL.Services
             _jwtSettings = jwtOptions.Value;
         }
 
-        public GenerateTokenResponse GenerateToken(GlowticsUser user, IList<string> roles)
+        public GenerateTokenResponse GenerateToken(GlowticsUser user, IList<string> roles, Guid? retailerId = null)
         {
             var claims = new List<Claim>
             {
@@ -31,6 +31,13 @@ namespace Glowtics.BLL.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // The retailer dashboard/catalog controllers resolve the retailer from this claim
+            // (same claim the API-key auth handler emits). Without it, GetRetailerId() throws.
+            if (retailerId.HasValue)
+            {
+                claims.Add(new Claim("RetailerId", retailerId.Value.ToString()));
+            }
 
             foreach (var role in roles)
             {

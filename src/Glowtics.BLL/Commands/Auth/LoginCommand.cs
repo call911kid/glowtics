@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Glowtics.BLL.Exceptions;
 using Glowtics.BLL.Interfaces;
 using Glowtics.BLL.Responses;
+using Glowtics.DAL.Context;
 using Glowtics.DAL.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Glowtics.BLL.Commands.Auth
 {
@@ -18,11 +21,13 @@ namespace Glowtics.BLL.Commands.Auth
     {
         private readonly UserManager<GlowticsUser> _userManager;
         private readonly IJwtService _jwtService;
+        private readonly GlowticsDbContext _dbContext;
 
-        public LoginCommandHandler(UserManager<GlowticsUser> userManager, IJwtService jwtService)
+        public LoginCommandHandler(UserManager<GlowticsUser> userManager, IJwtService jwtService, GlowticsDbContext dbContext)
         {
             _userManager = userManager;
             _jwtService = jwtService;
+            _dbContext = dbContext;
         }
 
         public async Task<GenerateTokenResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -46,7 +51,14 @@ namespace Glowtics.BLL.Commands.Auth
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var token = _jwtService.GenerateToken(user, roles);
+            // A retailer's dashboard/catalog endpoints resolve their store from the "RetailerId" claim,
+            // so it must be baked into the login token (null for non-retailer users -> no claim).
+            var retailerId = await _dbContext.Retailers
+                .Where(r => r.UserId == user.Id)
+                .Select(r => (Guid?)r.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            var token = _jwtService.GenerateToken(user, roles, retailerId);
 
             return token;
         }
