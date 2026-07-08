@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
+using Glowtics.Api.Constants;
 using Glowtics.Api.Responses;
 using Glowtics.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -49,16 +50,31 @@ namespace Glowtics.Api.Middlewares
 
         private static string GetErrorCode(Exception exception) => exception switch
         {
-            ValidationException => "VALIDATION_ERROR",
-            GlowticsException glowticsException => glowticsException.ErrorCode,
-            _ => "ERR_INTERNAL_SERVER_ERROR"
+            ValidationException => ErrorCodes.ValidationFailed,
+            RetailerNotFoundException => ErrorCodes.RetailerNotFound,
+            ProductNotFoundException => ErrorCodes.ProductNotFound,
+            UserNotFoundException => ErrorCodes.UserNotFound,
+            DomainAlreadyRegisteredException => ErrorCodes.DomainAlreadyRegistered,
+            InvalidOtpException => ErrorCodes.InvalidOrExpiredOtp,
+            PasswordChangeFailedException => ErrorCodes.PasswordChangeFailed,
+            UserCreationFailedException => ErrorCodes.UserCreationFailed,
+            RoleAlreadyExistsException => ErrorCodes.RoleAlreadyExists,
+            RoleCreationFailedException => ErrorCodes.RoleCreationFailed,
+            RoleAssignmentFailedException => ErrorCodes.RoleAssignmentFailed,
+            DiagnosisFailedException => ErrorCodes.DiagnosisFailed,
+            EmbeddingGenerationFailedException => ErrorCodes.EmbeddingGenerationFailed,
+            InvalidCredentialsException => ErrorCodes.InvalidCredentials,
+            AccountRestrictedException => ErrorCodes.AccountRestricted,
+            DatabaseProvisioningException => ErrorCodes.DatabaseProvisioning,
+            GlowticsException => ErrorCodes.UnknownGlowticsException, //fallback
+            _ => ErrorCodes.InternalServerError
         };
 
         private static HttpStatusCode GetStatusCode(Exception exception) => exception switch
         {
             ValidationException => HttpStatusCode.BadRequest,
             InvalidCredentialsException => HttpStatusCode.Unauthorized,
-            EntityNotFoundException => HttpStatusCode.NotFound,
+            EntityNotFoundException => HttpStatusCode.NotFound, 
             BusinessRuleViolationException => HttpStatusCode.BadRequest,
             AccountRestrictedException => HttpStatusCode.Forbidden,
             ExternalServiceException => HttpStatusCode.BadGateway,

@@ -1,6 +1,6 @@
-namespace Glowtics.BLL.Constants
+namespace Glowtics.Api.Constants
 {
-    internal static class ErrorCodes
+    public static class ErrorCodes
     {
         public const string InvalidCredentials = "ERR_INVALID_CREDENTIALS";
         public const string AccountRestricted = "ERR_ACCOUNT_RESTRICTED";
@@ -13,7 +13,6 @@ namespace Glowtics.BLL.Constants
         public const string ProductNotFound = "ERR_PRODUCT_NOT_FOUND";
         public const string UserNotFound = "ERR_USER_NOT_FOUND";
         
-
         // Specific Business Rule Violations
         public const string DomainAlreadyRegistered = "ERR_DOMAIN_ALREADY_REGISTERED";
         public const string InvalidOrExpiredOtp = "ERR_INVALID_OR_EXPIRED_OTP";
@@ -27,5 +26,8 @@ namespace Glowtics.BLL.Constants
 
         // Infrastructure & Integration Errors
         public const string EmbeddingGenerationFailed = "ERR_EMBEDDING_GENERATION_FAILED";
+        
+        // Fallbacks
+        public const string UnknownGlowticsException = "ERR_GLOWTICS_EXCEPTION";
     }
 }

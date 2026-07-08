@@ -39,13 +39,13 @@ namespace Glowtics.BLL.Commands.Identity
             var result =await  _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
-                throw new BusinessRuleViolationException(ErrorCodes.UserCreationFailed, result.Errors.Select(e => e.Description));
+                throw new UserCreationFailedException(string.Join(", ", string.Join(", ", result.Errors.Select(e => e.Description))));
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
             if(!roleResult.Succeeded)
             {
-                throw new BusinessRuleViolationException(ErrorCodes.RoleAssignmentFailed, roleResult.Errors.Select(e => e.Description));
+                throw new RoleAssignmentFailedException(string.Join(", ", roleResult.Errors.Select(e => e.Description)));
             }
 
             return user.Id;

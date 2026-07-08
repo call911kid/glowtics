@@ -23,17 +23,13 @@ namespace Glowtics.BLL.Commands.Identity
 
         public async Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
-            if (user == null)
-            {
-                throw new EntityNotFoundException(ErrorCodes.UserNotFound);
-            }
-
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString())
+                ?? throw new UserNotFoundException();
             var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
-                throw new BusinessRuleViolationException(ErrorCodes.PasswordChangeFailed, errors);
+                throw new PasswordChangeFailedException(string.Join(", ", errors));
             }
 
             return true;

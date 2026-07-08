@@ -35,17 +35,14 @@ namespace Glowtics.BLL.Commands.Diagnostics
 
         public async Task<AddDiagnosticSessionResponse> Handle(AddDiagnosticSessionCommand request, CancellationToken cancellationToken)
         {
-            // 1. Fetch the Retailer to ensure it exists
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Id == request.RetailerId, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Entity 'Retailer' ({request.RetailerId}) was not found.");
+                ?? throw new RetailerNotFoundException($"Retailer ({request.RetailerId}) was not found.");
 
-            // 2. Fetch the corresponding Products tracked by DbContext using the ExternalProductIds
             var products = await _dbContext.Products
                 .Where(p => p.RetailerId == request.RetailerId && request.ExternalProductIds.Contains(p.ExternalProductId))
                 .ToListAsync(cancellationToken);
 
-            // 3. Create the new DiagnosticSession entity
             var session = new DiagnosticSession
             {
                 RetailerId = retailer.Id,
@@ -55,13 +52,11 @@ namespace Glowtics.BLL.Commands.Diagnostics
                 CreatedAt = DateTime.UtcNow
             };
 
-            // 4. Link the fetched Products to the session
             foreach (var product in products)
             {
                 session.RecommendedProducts.Add(product);
             }
 
-            // 5. Add to the DbContext and save
             _dbContext.DiagnosticSessions.Add(session);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

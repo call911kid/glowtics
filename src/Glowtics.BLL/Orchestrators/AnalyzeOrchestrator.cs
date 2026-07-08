@@ -52,7 +52,7 @@ namespace Glowtics.BLL.Orchestrators
         {
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Domain == request.Domain, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Retailer with domain '{request.Domain}' was not found.");
+                ?? throw new RetailerNotFoundException($"Retailer with domain '{request.Domain}' was not found.");
             var diagnosisResult = await _langflowService.DiagnoseAsync(
                 request.PhotoBytes, 
                 request.FileName, 

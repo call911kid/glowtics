@@ -85,7 +85,7 @@ namespace Glowtics.BLL.Services
             var routineText = outputs.TryGetValue(nodes.ChatOutput, out var rt) ? rt : outputs.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(routineText))
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Langflow analysis returned no routine.");
+                throw new DiagnosisFailedException("Langflow analysis returned no routine.");
             }
 
             return new LangflowDiagnosisResult
@@ -100,8 +100,7 @@ namespace Glowtics.BLL.Services
         {
             if (string.IsNullOrWhiteSpace(_settings.AgentFlowId))
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
-                    "Agent flow is not configured. Set LangflowApi:AgentFlowId after deploying GLOWTICS-agent.json.");
+                throw new DiagnosisFailedException("Agent flow is not configured. Set LangflowApi:AgentFlowId after deploying GLOWTICS-agent.json.");
             }
 
             var nodes = await GetFlowNodesAsync(_settings.AgentFlowId!, cancellationToken);
@@ -123,7 +122,7 @@ namespace Glowtics.BLL.Services
             var answer = outputs.TryGetValue(nodes.ChatOutput, out var a) ? a : outputs.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(answer))
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Agent flow returned no answer.");
+                throw new DiagnosisFailedException("Agent flow returned no answer.");
             }
             return answer!;
         }
@@ -149,8 +148,7 @@ namespace Glowtics.BLL.Services
             var response = await _httpClient.GetAsync($"flows/{flowId}", cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
-                    $"Could not load flow {flowId} (HTTP {(int)response.StatusCode}).");
+                throw new DiagnosisFailedException($"Could not load flow {flowId} (HTTP {(int)response.StatusCode}).");
             }
 
             using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken));
@@ -167,8 +165,7 @@ namespace Glowtics.BLL.Services
 
             if (string.IsNullOrEmpty(fn.ChatInput) || string.IsNullOrEmpty(fn.ChatOutput))
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
-                    $"Flow {flowId} is missing a ChatInput or ChatOutput node.");
+                throw new DiagnosisFailedException($"Flow {flowId} is missing a ChatInput or ChatOutput node.");
             }
 
             _nodeCache[flowId] = fn;
@@ -195,14 +192,13 @@ namespace Glowtics.BLL.Services
             var response = await _httpClient.PostAsync($"files/upload/{flowId}", form, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
-                    $"Photo upload to Langflow failed (HTTP {(int)response.StatusCode}).");
+                throw new DiagnosisFailedException($"Photo upload to Langflow failed (HTTP {(int)response.StatusCode}).");
             }
 
             using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken));
             if (!doc.RootElement.TryGetProperty("file_path", out var fp) || fp.GetString() is not { Length: > 0 } filePath)
             {
-                throw new ExternalServiceException(ErrorCodes.DiagnosisFailed, "Langflow upload returned no file path.");
+                throw new DiagnosisFailedException("Langflow upload returned no file path.");
             }
             return filePath;
         }
@@ -227,8 +223,7 @@ namespace Glowtics.BLL.Services
                 }
             }
 
-            throw new ExternalServiceException(ErrorCodes.DiagnosisFailed,
-                $"Langflow flow run failed: {Truncate(lastError, 300)}");
+            throw new DiagnosisFailedException($"Langflow flow run failed: {Truncate(lastError, 300)}");
         }
 
         /// <summary>component_id -> output text, across the run response.</summary>

@@ -42,7 +42,7 @@ namespace Glowtics.BLL.Queries.Dashboard
 
             if (retailerId == Guid.Empty)
             {
-                throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"No active retailer found for user id '{request.UserId}'.");
+                throw new RetailerNotFoundException($"No active retailer found for user id '{request.UserId}'.");
             }
 
             // --- MOCK DATA ---

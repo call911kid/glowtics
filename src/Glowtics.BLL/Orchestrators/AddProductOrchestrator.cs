@@ -44,13 +44,12 @@ namespace Glowtics.BLL.Orchestrators
         {
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Id == request.RetailerId, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Entity 'Retailer' ({request.RetailerId}) was not found.");
+                ?? throw new RetailerNotFoundException($"Retailer ({request.RetailerId}) was not found.");
 
             using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                // 1. Dispatch AddProductCommand with the RetailerId to sync the structured data to SQL Server.
                 var addProductCommand = new AddProductCommand(
                     retailer.Id,
                     request.ExternalProductId,
@@ -63,7 +62,6 @@ namespace Glowtics.BLL.Orchestrators
 
                 var productId = await _mediator.Send(addProductCommand, cancellationToken);
 
-                // 2. Call AddEmbeddingCommand which talks to Langflow/AI pipeline to generate and save vectors.
                 var embeddingCommand = new AddEmbeddingCommand(
                     retailer.MongoCollectionName,
                     request.ExternalProductId,

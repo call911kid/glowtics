@@ -28,7 +28,7 @@ namespace Glowtics.BLL.Commands.Products
         {
             var product = await _dbContext.Products
                 .FirstOrDefaultAsync(p => p.Id == request.ProductId && p.RetailerId == request.RetailerId, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.ProductNotFound, $"Entity 'Product' ({request.ProductId}) was not found.");
+                ?? throw new ProductNotFoundException($"Product ({request.ProductId}) was not found.");
 
             product.IsAvailable = request.IsAvailable;
 
