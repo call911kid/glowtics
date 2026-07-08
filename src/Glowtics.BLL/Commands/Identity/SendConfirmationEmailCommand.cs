@@ -29,7 +29,7 @@ namespace Glowtics.BLL.Commands.Identity
         public async Task<bool> Handle(SendConfirmationEmailCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId.ToString()) 
-                ?? throw new EntityNotFoundException(ErrorCodes.UserNotFound);
+                ?? throw new UserNotFoundException();
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 

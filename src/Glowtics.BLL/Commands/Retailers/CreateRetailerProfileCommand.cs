@@ -31,7 +31,7 @@ namespace Glowtics.BLL.Commands.Retailers
             var domainExists = await _dbContext.Retailers.AnyAsync(r => r.Domain == request.Domain, cancellationToken);
             if (domainExists)
             {
-                throw new BusinessRuleViolationException(ErrorCodes.DomainAlreadyRegistered);
+                throw new DomainAlreadyRegisteredException();
             }
 
             var retailer = new Retailer

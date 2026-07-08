@@ -48,12 +48,10 @@ namespace Glowtics.BLL.Orchestrators
 
         public async Task<AdvancedAnalyzeResponse> Handle(AdvancedAnalyzeOrchestratorRequest request, CancellationToken cancellationToken)
         {
-            // Fetch Retailer early to fail fast if domain is invalid, and to get the MongoCollectionName
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Domain == request.Domain, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Retailer with domain '{request.Domain}' was not found.");
+                ?? throw new RetailerNotFoundException($"Retailer with domain '{request.Domain}' was not found.");
 
-            // 1. VALIDATION flow (fast) — separately timed/traced.
             var sw = Stopwatch.StartNew();
             var validation = await _langflowService.ValidateAsync(request.PhotoBytes, request.FileName, cancellationToken);
             sw.Stop();
@@ -76,13 +74,11 @@ namespace Glowtics.BLL.Orchestrators
                 };
             }
 
-            // 2. ANALYSIS flow (full RAG) — separately timed/traced.
             sw.Restart();
             var diagnosis = await _langflowService.AnalyzeRoutineAsync(
                 request.PhotoBytes, request.FileName, retailer.MongoCollectionName, cancellationToken);
             sw.Stop();
             
-            // 3. Match Products
             var dbProducts = await _dbContext.Products
                 .Where(p => p.RetailerId == retailer.Id && diagnosis.ExternalProductIds.Contains(p.ExternalProductId))
                 .ToListAsync(cancellationToken);
@@ -99,7 +95,6 @@ namespace Glowtics.BLL.Orchestrators
                 Model = "glowtics-analysis-flow"
             }, cancellationToken);
 
-            // 4. Save to SQL
             var command = new AddDiagnosticSessionCommand(
                 retailer.Id,
                 diagnosis.SkinProfileResult,
@@ -117,7 +112,7 @@ namespace Glowtics.BLL.Orchestrators
                 {
                     recommendedProducts.Add(new RecommendedProductDto
                     {
-                        Rationale = "Recommended by AI", // The friend's code didn't return Rationale per product in LangflowDiagnosisResult, so we use a default
+                        Rationale = "Recommended by AI", 
                         ExternalProductId = dbProd.ExternalProductId,
                         Name = dbProd.Name,
                         IsAvailable = dbProd.IsAvailable,

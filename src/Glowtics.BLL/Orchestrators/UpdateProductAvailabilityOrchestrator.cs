@@ -38,13 +38,13 @@ namespace Glowtics.BLL.Orchestrators
         {
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.Id == request.RetailerId, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, $"Entity 'Retailer' ({request.RetailerId}) was not found.");
+                ?? throw new RetailerNotFoundException($"Retailer ({request.RetailerId}) was not found.");
 
             var product = await _dbContext.Products
                 .Where(p => p.ExternalProductId == request.ExternalProductId && p.RetailerId == retailer.Id)
                 .Select(p => new { p.Id, p.ExternalProductId, p.IsAvailable })
                 .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.ProductNotFound, $"Entity 'Product' ({request.ExternalProductId}) was not found.");
+                ?? throw new ProductNotFoundException($"Product ({request.ExternalProductId}) was not found.");
 
             if (product.IsAvailable == request.IsAvailable)
             {

@@ -23,13 +23,13 @@ namespace Glowtics.BLL.Commands.Identity
         public async Task<bool> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email)
-            ?? throw new BusinessRuleViolationException(ErrorCodes.InvalidOrExpiredOtp);
+            ?? throw new InvalidOtpException();
 
 
             var result = await _userManager.ConfirmEmailAsync(user, request.Otp);
             if (!result.Succeeded)
             {
-                throw new BusinessRuleViolationException(ErrorCodes.InvalidOrExpiredOtp);
+                throw new InvalidOtpException();
             }
 
             return true;

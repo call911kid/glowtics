@@ -73,7 +73,7 @@ namespace Glowtics.BLL.Services
             
             if (!response.IsSuccessStatusCode)
             {
-                throw new ExternalServiceException(ErrorCodes.EmbeddingGenerationFailed); 
+                throw new EmbeddingGenerationFailedException(); 
             }
         }
 
@@ -92,7 +92,7 @@ namespace Glowtics.BLL.Services
             var uploadResponse = await _httpClient.PostAsync($"files/upload/{_settings.FlowId}", content, cancellationToken);
             if (!uploadResponse.IsSuccessStatusCode)
             {
-                throw new ExternalServiceException(ErrorCodes.InternalServerError, await uploadResponse.Content.ReadAsStringAsync(cancellationToken));
+                throw new ExternalServiceException(await uploadResponse.Content.ReadAsStringAsync(cancellationToken));
             }
 
             var uploadResult = await uploadResponse.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: cancellationToken);
@@ -125,7 +125,7 @@ namespace Glowtics.BLL.Services
             var runResponse = await _httpClient.PostAsJsonAsync($"run/{_settings.FlowId}?stream=false", runPayload, cancellationToken);
             if (!runResponse.IsSuccessStatusCode)
             {
-                throw new ExternalServiceException(ErrorCodes.InternalServerError, "Failed to execute Langflow pipeline.");
+                throw new ExternalServiceException("Failed to execute Langflow pipeline.");
             }
 
             var runResult = await runResponse.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: cancellationToken);
@@ -159,7 +159,7 @@ namespace Glowtics.BLL.Services
             if (routineJson == null)
             {
                 // Must be a rejection (e.g. "Image rejected...")
-                throw new ExternalServiceException(ErrorCodes.BusinessRuleViolation, rejectionText ?? "Analysis failed with unknown error.");
+                throw new ExternalServiceException(rejectionText ?? "Analysis failed with unknown error.");
             }
 
             var routineObj = JsonSerializer.Deserialize<LangflowRoutineResponse>(routineJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

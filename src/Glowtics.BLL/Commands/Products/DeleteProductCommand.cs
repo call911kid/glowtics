@@ -23,12 +23,8 @@ namespace Glowtics.BLL.Commands.Products
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _dbContext.Products
-                .FirstOrDefaultAsync(p => p.Id == request.ProductId && p.RetailerId == request.RetailerId, cancellationToken);
-
-            if (product == null)
-            {
-                throw new EntityNotFoundException(ErrorCodes.ProductNotFound, $"Entity 'Product' ({request.ProductId}) was not found.");
-            }
+                .FirstOrDefaultAsync(p => p.Id == request.ProductId && p.RetailerId == request.RetailerId, cancellationToken)
+                ?? throw new ProductNotFoundException($"Product ({request.ProductId}) was not found.");
 
             product.IsDeleted = true;
             

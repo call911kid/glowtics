@@ -22,16 +22,12 @@ namespace Glowtics.BLL.Commands.Identity
 
         public async Task<bool> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-            {
-                throw new BusinessRuleViolationException(ErrorCodes.InvalidOrExpiredOtp);
-            }
-
+            var user = await _userManager.FindByEmailAsync(request.Email)
+                ?? throw new UserNotFoundException();
             var result = await _userManager.ResetPasswordAsync(user, request.Otp, request.NewPassword);
             if (!result.Succeeded)
             {
-                throw new BusinessRuleViolationException(ErrorCodes.InvalidOrExpiredOtp);
+                throw new InvalidOtpException();
             }
 
             return true;

@@ -27,7 +27,7 @@ namespace Glowtics.BLL.Commands.Sessions
                 .Where(s => s.RetailerId == request.RetailerId && s.ExternalUserId == request.ExternalUserId)
                 .OrderByDescending(s => s.CreatedAt)
                 .FirstOrDefaultAsync(cancellationToken)
-                ?? throw new EntityNotFoundException("ERR_SESSION_NOT_FOUND", $"No diagnostic session found for external user '{request.ExternalUserId}'.");
+                ?? throw new EntityNotFoundException($"No diagnostic session found for external user '{request.ExternalUserId}'.");
 
             session.Feedback = request.Feedback;
             

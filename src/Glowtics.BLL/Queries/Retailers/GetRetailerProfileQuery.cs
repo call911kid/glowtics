@@ -35,7 +35,7 @@ namespace Glowtics.BLL.Queries.Retailers
         {
             var retailer = await _dbContext.Retailers
                 .FirstOrDefaultAsync(r => r.UserId == request.UserId && !r.IsDeleted, cancellationToken)
-                ?? throw new EntityNotFoundException(ErrorCodes.RetailerNotFound, "Retailer profile not found for this user.");
+                ?? throw new RetailerNotFoundException($"Retailer profile not found for user ({request.UserId}).");
 
             return new GetRetailerProfileResponse
             {
